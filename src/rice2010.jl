@@ -12,7 +12,7 @@ include("radiativeforcing_component.jl")
 include("slr_component.jl")
 include("welfare_component.jl")
 
-function runricemodel(p)
+function constructrice(p)
     al              = p[:al]
     l               = p[:l]
     gama            = p[:gama]
@@ -215,6 +215,5 @@ function runricemodel(p)
 
     bindparameter(m, :welfare, :CPC, :neteconomy)
 
-    run(m)
     return m
 end
