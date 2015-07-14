@@ -2,18 +2,17 @@ using IAMF
 
 include("IAMF-rice2010-parameters.jl")
 
+include("climatedynamics_component.jl")
+include("co2cycle_component.jl")
+include("damages_component.jl")
+include("emissions_component.jl")
+include("grosseconomy_component.jl")
+include("neteconomy_component.jl")
+include("radiativeforcing_component.jl")
+include("slr_component.jl")
+include("welfare_component.jl")
+
 function runricemodel(p)
-
-    include("Gross_Economy_RICE2010_IAMF.jl")
-    include("Emissions_RICE2010_IAMF.jl")
-    include("CO2_Cycle_RICE2010_IAMF.jl")
-    include("Radiative_Forcing_RICE2010_IAMF.jl")
-    include("Climate_Dynamics_RICE2010_IAMF.jl")
-    include("Sea_Level_Rise_RICE2010_IAMF.jl")
-    include("Damages_RICE2010_IAMF.jl")
-    include("Net_Economy_RICE2010_IAMF.jl")
-    include("Welfare_RICE2010_IAMF.jl")
-
     al              = p[:al]
     l               = p[:l]
     gama            = p[:gama]
