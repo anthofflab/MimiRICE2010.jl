@@ -1,16 +1,16 @@
 using IAMF
 
-include("IAMF-rice2010-parameters.jl")
+include("parameters.jl")
 
-include("climatedynamics_component.jl")
-include("co2cycle_component.jl")
-include("damages_component.jl")
-include("emissions_component.jl")
-include("grosseconomy_component.jl")
-include("neteconomy_component.jl")
-include("radiativeforcing_component.jl")
-include("slr_component.jl")
-include("welfare_component.jl")
+include("components/climatedynamics_component.jl")
+include("components/co2cycle_component.jl")
+include("components/damages_component.jl")
+include("components/emissions_component.jl")
+include("components/grosseconomy_component.jl")
+include("components/neteconomy_component.jl")
+include("components/radiativeforcing_component.jl")
+include("components/slr_component.jl")
+include("components/welfare_component.jl")
 
 function constructrice(p)
     al              = p[:al]
