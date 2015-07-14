@@ -2,7 +2,7 @@ using Compat
 using ExcelReaders
 include("helpers.jl")
 
-function getrice2010parameters()
+function getrice2010parameters(filename)
     p = Dict{Symbol,Any}()
 
 
@@ -11,7 +11,7 @@ function getrice2010parameters()
     regions = ["US", "EU", "Japan", "Russia", "Eurasia", "China", "India", "MidEast", "Africa", "LatAm", "OHI", "OthAsia"]
 
     #Open RICE_2010 Excel File to Read Parameters
-    f = openxl(joinpath("data", "RICE_2010_base_000.xlsm"))
+    f = openxl(filename)
 
     ## Time Step
     tstep = 10 # Years per Period
