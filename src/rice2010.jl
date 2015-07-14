@@ -217,3 +217,11 @@ function constructrice(p)
 
     return m
 end
+
+function getrice(;datafile="../data/RICE_2010_base_000.xlsm")
+    params = getrice2010parameters(datafile)
+
+    m = constructrice(params)
+
+    return m
+end
