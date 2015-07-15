@@ -1,4 +1,4 @@
-include("rice.jl")
+include("rice2010.jl")
 
 function getmarginal_rice_models(;emissionyear=2005)
     m1 = getrice()
