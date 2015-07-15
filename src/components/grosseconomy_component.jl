@@ -13,6 +13,8 @@ using IAMF
     dk      = Parameter(index=[regions])               #Depreciation rate on capital (per year)
     k0      = Parameter(index=[regions])               #Initial capital value (trill 2005 USD)
 
+    # TODO remove this, just a temporary output trick
+    L = Variable(index=[time, regions])
 end
 
 function timestep(state::grosseconomy, t::Int)
@@ -33,5 +35,10 @@ function timestep(state::grosseconomy, t::Int)
     #Define function for YGROSS
     for r in d.regions
         v.YGROSS[t,r] = (p.al[t,r] * (p.l[t,r]/1000)^(1-p.gama)) * (v.K[t,r]^p.gama)
+    end
+
+    # TODO remove this, just a temporary output trick
+    for r in d.regions
+        v.L[t,r] = p.l[t,r]
     end
 end
