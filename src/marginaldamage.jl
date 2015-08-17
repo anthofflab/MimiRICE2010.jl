@@ -16,3 +16,21 @@ function getmarginal_rice_models(;emissionyear=2005,datafile="../data/RICE_2010_
 
     return m1, m2
 end
+
+# This function returns a matrix of marginal damages per one t of carbon emission in the
+# emissionyear parameter year.
+function getmarginaldamages_rice(;emissionyear=2005,datafile="../data/RICE_2010_base_000.xlsm")
+    m1, m2 = getmarginal_rice_models(emissionyear=emissionyear, datafile=datafile)
+
+    run(m1)
+    run(m2)
+
+    damage1 = m1[:impactaggregation,:loss]
+    damage2 = m2[:impactaggregation,:loss]
+
+    # Calculate the marginal damage between run 1 and 2 for each
+    # year/region
+    marginaldamage = (damage2.-damage1) .* 10^12 / 10^9 / 10
+
+    return marginaldamage[getindexfromyear_rice_2010(emissionyear):end,:]
+end
