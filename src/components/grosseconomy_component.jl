@@ -1,4 +1,4 @@
-using IAMF
+using Mimi
 
 @defcomp grosseconomy begin
     regions = Index()           #Following from FUND

@@ -1,4 +1,4 @@
-using IAMF
+using Mimi
 
 @defcomp co2cycle begin
     regions = Index()

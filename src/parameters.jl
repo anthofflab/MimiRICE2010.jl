@@ -71,7 +71,7 @@ function getrice2010parameters(filename)
 
     #Welfare Weights
    alpha0 = transpose(readxl(f, "Data!B359:BI370")) #Read in alpha
-   alpha=convert(Array{Float64}, alpha0)    #Convert to type used by IAMF
+   alpha=convert(Array{Float64}, alpha0)    #Convert to type used by Mimi
 
 
 
