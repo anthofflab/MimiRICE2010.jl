@@ -105,7 +105,7 @@ function constructrice(p)
     setparameter(m, :grosseconomy, :dk, dk)
     setparameter(m, :grosseconomy, :k0,  k0)
 
-    bindparameter(m, :grosseconomy, :I, :neteconomy )
+    connectparameter(m, :grosseconomy, :I, :neteconomy, :I)
 
 
     #EMISSIONS COMPONENT
@@ -113,7 +113,7 @@ function constructrice(p)
     setparameter(m, :emissions, :MIU, MIU)
     setparameter(m, :emissions, :etree, etree)
 
-    bindparameter(m, :emissions, :YGROSS, :grosseconomy)
+    connectparameter(m, :emissions, :YGROSS, :grosseconomy, :YGROSS)
 
 
     #CO2 CYCLE COMPONENT
@@ -129,7 +129,7 @@ function constructrice(p)
     setparameter(m, :co2cycle, :b32, b32)
     setparameter(m, :co2cycle, :b33, b33)
 
-    bindparameter(m, :co2cycle, :E, :emissions)
+    connectparameter(m, :co2cycle, :E, :emissions, :E)
 
 
     #RADIATIVE FORCING COMPONENT
@@ -137,8 +137,8 @@ function constructrice(p)
     setparameter(m, :radiativeforcing, :fco22x, fco22x)
     setparameter(m, :radiativeforcing, :mat1, mat1)
 
-    bindparameter(m, :radiativeforcing, :MAT, :co2cycle)
-    bindparameter(m, :radiativeforcing, :MATSUM, :co2cycle)
+    connectparameter(m, :radiativeforcing, :MAT, :co2cycle, :MAT)
+    connectparameter(m, :radiativeforcing, :MATSUM, :co2cycle, :MATSUM)
 
 
     #CLIMATE DYNAMICS COMPONENT
@@ -151,7 +151,7 @@ function constructrice(p)
     setparameter(m, :climatedynamics, :c3, c3)
     setparameter(m, :climatedynamics, :c4,  c4)
 
-    bindparameter(m, :climatedynamics, :FORC, :radiativeforcing)
+    connectparameter(m, :climatedynamics, :FORC, :radiativeforcing, :FORC)
 
 
     #SEA LEVEL RISE COMPONENT
@@ -179,8 +179,8 @@ function constructrice(p)
     setparameter(m, :sealevelrise, :slrdamlinear  ,slrdamlinear)
     setparameter(m, :sealevelrise, :slrdamquadratic ,slrdamquadratic)
 
-    bindparameter(m, :sealevelrise, :TATM, :climatedynamics)
-    bindparameter(m, :sealevelrise, :YGROSS, :grosseconomy)
+    connectparameter(m, :sealevelrise, :TATM, :climatedynamics, :TATM)
+    connectparameter(m, :sealevelrise, :YGROSS, :grosseconomy, :YGROSS)
 
 
     #DAMAGES COMPONENT
@@ -188,9 +188,9 @@ function constructrice(p)
     setparameter(m, :damages, :a2, a2)
     setparameter(m, :damages, :a3, a3)
 
-    bindparameter(m, :damages, :TATM, :climatedynamics)
-    bindparameter(m, :damages, :YGROSS, :grosseconomy)
-    bindparameter(m, :damages, :SLRDAMAGES, :sealevelrise)
+    connectparameter(m, :damages, :TATM, :climatedynamics, :TATM)
+    connectparameter(m, :damages, :YGROSS, :grosseconomy, :YGROSS)
+    connectparameter(m, :damages, :SLRDAMAGES, :sealevelrise, :SLRDAMAGES)
 
     #NET ECONOMY COMPONENT
     setparameter(m, :neteconomy, :cost1, cost1 )
@@ -201,8 +201,8 @@ function constructrice(p)
     setparameter(m, :neteconomy, :S, savings)
     setparameter(m, :neteconomy, :l, l)
 
-    bindparameter(m, :neteconomy, :YGROSS, :grosseconomy)
-    bindparameter(m, :neteconomy, :DAMFRAC, :damages)
+    connectparameter(m, :neteconomy, :YGROSS, :grosseconomy, :YGROSS)
+    connectparameter(m, :neteconomy, :DAMFRAC, :damages, :DAMFRAC)
 
 
     #WELFARE COMPONENT
@@ -213,7 +213,7 @@ function constructrice(p)
     setparameter(m, :welfare, :scale2, scale2)
     setparameter(m, :welfare, :alpha, alpha)
 
-    bindparameter(m, :welfare, :CPC, :neteconomy)
+    connectparameter(m, :welfare, :CPC, :neteconomy, :CPC)
 
     return m
 end

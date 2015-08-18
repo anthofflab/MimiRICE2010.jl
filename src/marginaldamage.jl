@@ -8,8 +8,8 @@ function getmarginal_rice_models(;emissionyear=2005,datafile="../data/RICE_2010_
     addem = zeros(60)
     addem[getindexfromyear_rice_2010(emissionyear)] = 1.0
     setparameter(m2,:marginalemission,:add,addem)
-    bindparameter(m2,:marginalemission,:input,:emissions,:E)
-    bindparameter(m2, :co2cycle,:E,:marginalemission,:output)
+    connectparameter(m2,:marginalemission,:input,:emissions,:E)
+    connectparameter(m2, :co2cycle,:E,:marginalemission,:output)
 
     run(m1)
     run(m2)
