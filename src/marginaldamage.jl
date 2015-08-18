@@ -25,12 +25,12 @@ function getmarginaldamages_rice(;emissionyear=2005,datafile="../data/RICE_2010_
     run(m1)
     run(m2)
 
-    damage1 = m1[:impactaggregation,:loss]
-    damage2 = m2[:impactaggregation,:loss]
+    damage1 = m1[:damages,:DAMAGES]
+    damage2 = m2[:damages,:DAMAGES]
 
     # Calculate the marginal damage between run 1 and 2 for each
     # year/region
     marginaldamage = (damage2.-damage1) .* 10^12 / 10^9 / 10
 
-    return marginaldamage[getindexfromyear_rice_2010(emissionyear):end,:]
+    return marginaldamage
 end
