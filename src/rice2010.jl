@@ -178,6 +178,7 @@ function constructrice(p)
     setparameter(m, :sealevelrise, :slrelasticity  ,slrelasticity)
     setparameter(m, :sealevelrise, :slrdamlinear  ,slrdamlinear)
     setparameter(m, :sealevelrise, :slrdamquadratic ,slrdamquadratic)
+    setparameter(m, :sealevelrise, :fullExcelCompat, false)
 
     connectparameter(m, :sealevelrise, :TATM, :climatedynamics, :TATM)
     connectparameter(m, :sealevelrise, :YGROSS, :grosseconomy, :YGROSS)

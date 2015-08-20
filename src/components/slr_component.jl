@@ -43,6 +43,9 @@ using Mimi
     slrdamlinear    = Parameter(index=[regions])
     slrdamquadratic = Parameter(index=[regions])
     YGROSS          = Parameter(index=[time, regions])
+
+    # Run in full compatability mode with the Excel version
+    fullExcelCompat::Bool = Parameter()
 end
 
 function timestep(state::sealevelrise, t::Int)
