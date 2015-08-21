@@ -130,7 +130,11 @@ function timestep(state::sealevelrise, t::Int)
 #ANTARCTIC ICE SHEET (AIS)
 
     #Define function for AISMELTRATE
+    if t <= 11
     v.AISMELTRATE[t] = ifelse(p.TATM[t] < 3., (p.aismeltlow * p.TATM[t] * p.aisratio + p.aisintercept), (p.aisinflection * p.aismeltlow + p.aismeltup * (p.TATM[t] - 3.) + p.aisintercept))
+    else
+    v.AISMELTRATE[t] = ifelse(p.TATM[t] < 3., (p.aismeltlow * p.TATM[t] * p.aisratio + p.aisintercept), (p.aisinflection * p.aismeltlow + p.aismeltup * (p.TATM[t] - 3.) + p.aismelt0))
+    end
 
     #Define function for AISCUM
     if t == 1
