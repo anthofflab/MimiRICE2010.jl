@@ -29,13 +29,6 @@ function timestep(state::emissions, t::Int)
     #Define function for E
     v.E[t] = sum(v.EIND[t,:]) + p.etree[t]
 
- # v.E[t]=0
- #    for r in d.regions
- #      v.E[t] += v.EIND[t,r]#+ p.etree[t]
- #      end
- #      v.E[t] = v.E[t] +p.etree[t]
-
-
    #Define function for CCA
     if t==1
         v.CCA[t] = sum(v.EIND[t,:]) * 10.
