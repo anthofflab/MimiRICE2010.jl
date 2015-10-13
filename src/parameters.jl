@@ -90,11 +90,9 @@ function getrice2010parameters(filename)
 
     # Additive scaling coefficient (combines two additive scaling coefficients from RICE for calculating utility with welfare weights)
     scale2 = Array(Float64, length(regions))
-            i=1
-        for r=regions
+            for (i,r) in enumerate(regions)
             data = readxl(f, "$r\!B53:C53")
             scale2[i] = data[1] - data[2]
-            i=i+=1
             end
 
 

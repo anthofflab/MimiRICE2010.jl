@@ -30,7 +30,11 @@ function timestep(state::welfare, t::Int)
 
     #Define function for CEMUTOTPER
     for r in d.regions
-        v.CEMUTOTPER[t,r] = v.PERIODU[t,r] * p.l[t,r] * p.rr[t,r]
+       if t != 60
+            v.CEMUTOTPER[t,r] = v.PERIODU[t,r] * p.l[t,r] * p.rr[t,r]
+        else
+            v.CEMUTOTPER[t,r] = v.PERIODU[t,r] * p.l[t,r] * p.rr[t,r] / (1. - ((p.rr[t-1,r] / (1. + 0.015)^10) / p.rr[t-1,r]))
+        end
     end
 
     #Define function for REGCUMCEMUTOTPER
