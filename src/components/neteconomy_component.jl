@@ -14,6 +14,7 @@ using Mimi
 
     YGROSS      = Parameter(index=[time, regions])  #Gross world product GROSS of abatement and damages (trillions 2005 USD per year)
     DAMFRAC     = Parameter(index=[time, regions])  #Damages as fraction of gross output
+    DAMAGES     = Parameter(index=[time, regions])  #Damages (trillions 2005 USD per year)
     cost1       = Parameter(index=[time, regions])  #Adjusted cost for backstop
     MIU         = Parameter(index=[time, regions])  #Emission control rate GHGs
     expcost2    = Parameter(index=[regions])                #Exponent of control cost function
@@ -32,7 +33,11 @@ function timestep(state::neteconomy, t::Int)
 
     #Define function for YNET
     for r in d.regions
-        v.YNET[t,r] = p.YGROSS[t,r] * (1 - p.DAMFRAC[t,r])
+        if t==1
+            v.YNET[t,r] = p.YGROSS[t,r]/(1+p.DAMFRAC[t,r])
+        else
+            v.YNET[t,r] = p.YGROSS[t,r] - p.DAMAGES[t,r]
+        end
     end
 
     #Define function for ABATECOST
@@ -57,7 +62,11 @@ function timestep(state::neteconomy, t::Int)
 
     #Define function for C
     for r in d.regions
-        v.C[t,r] = v.Y[t,r] - v.I[t,r]
+        if t != 60
+            v.C[t,r] = v.Y[t,r] - v.I[t,r]
+        else
+            v.C[t,r] = v.C[t-1, r]
+        end
     end
 
     #Define function for CPC

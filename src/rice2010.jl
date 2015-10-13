@@ -178,7 +178,7 @@ function constructrice(p)
     setparameter(m, :sealevelrise, :slrelasticity  ,slrelasticity)
     setparameter(m, :sealevelrise, :slrdamlinear  ,slrdamlinear)
     setparameter(m, :sealevelrise, :slrdamquadratic ,slrdamquadratic)
-    setparameter(m, :sealevelrise, :fullExcelCompat, false)
+    setparameter(m, :sealevelrise, :fullExcelCompat, true)
 
     connectparameter(m, :sealevelrise, :TATM, :climatedynamics, :TATM)
     connectparameter(m, :sealevelrise, :YGROSS, :grosseconomy, :YGROSS)
@@ -204,7 +204,7 @@ function constructrice(p)
 
     connectparameter(m, :neteconomy, :YGROSS, :grosseconomy, :YGROSS)
     connectparameter(m, :neteconomy, :DAMFRAC, :damages, :DAMFRAC)
-
+    connectparameter(m, :neteconomy, :DAMAGES, :damages, :DAMAGES)
 
     #WELFARE COMPONENT
     setparameter(m, :welfare, :l, l )

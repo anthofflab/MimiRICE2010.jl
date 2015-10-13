@@ -29,7 +29,11 @@ function timestep(state::damages, t::Int)
 
     #Define function for DAMAGES
     for r in d.regions
-        v.DAMAGES[t,r] = (p.YGROSS[t,r] * v.DAMFRAC[t,r]) / (1. + v.DAMFRAC[t,r]^10)
+        if t==1
+            v.DAMAGES[t,r] = p.YGROSS[t,r] * (1 - 1 / (1+v.DAMFRAC[t,r]))
+        else
+            v.DAMAGES[t,r] = (p.YGROSS[t,r] * v.DAMFRAC[t,r]) / (1. + v.DAMFRAC[t,r]^10)
+        end
     end
 
 end
