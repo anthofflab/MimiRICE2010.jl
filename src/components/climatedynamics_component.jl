@@ -1,8 +1,6 @@
 using Mimi
 
 @defcomp climatedynamics begin
-    regions = Index()
-
     TATM    = Variable(index=[time])    #Increase in temperature of atmosphere (degrees C from 1900)
     TOCEAN  = Variable(index=[time])    #Increase in temperature of lower oceans (degrees C from 1900)
 

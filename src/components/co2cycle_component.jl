@@ -1,8 +1,6 @@
 using Mimi
 
 @defcomp co2cycle begin
-    regions = Index()
-
     MAT  = Variable(index=[time])   #Carbon concentration increase in atmosphere (GtC from 1750)
     MATSUM = Variable(index=[time]) #Sum of MAT[t] and MAT[t+1] to use in FORC[t] for radiativeforcing component
     MU   = Variable(index=[time])   #Carbon concentration increase in shallow oceans (GtC from 1750)

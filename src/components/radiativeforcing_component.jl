@@ -1,8 +1,6 @@
 using Mimi
 
 @defcomp radiativeforcing begin
-    regions=Index()
-
     FORC     = Variable(index=[time])   #Increase in radiative forcing (watts per m2 from 1900)
 
     MAT      = Parameter(index=[time])  #Carbon concentration increase in atmosphere (GtC from 1750)
