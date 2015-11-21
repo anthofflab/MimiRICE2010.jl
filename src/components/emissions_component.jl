@@ -11,9 +11,7 @@ using Mimi
     YGROSS  = Parameter(index=[time, regions])  #Gross world product GROSS of abatement and damages (trillions 2005 USD per year)
     etree   = Parameter(index=[time])  #Emissions from deforestation
 
-    #SHOULD MIU BE A PARAMETER???
     MIU     = Parameter(index=[time, regions])  #Emission control rate GHGs
-
 end
 
 function timestep(state::emissions, t::Int)

@@ -1,7 +1,7 @@
 using Mimi
 
 @defcomp radiativeforcing begin
-    FORC     = Variable(index=[time])   #Increase in radiative forcing (watts per m2 from 1900)
+    FORC     = Variable(index=[time])   #Increase in radiative forcing (watts per m^2 from 1900)
 
     MAT      = Parameter(index=[time])  #Carbon concentration increase in atmosphere (GtC from 1750)
     MATSUM   = Parameter(index=[time])  #Sum of MAT[t] and MAT[t+1] to use in FORC[t] for radiativeforcing component

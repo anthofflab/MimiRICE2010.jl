@@ -3,7 +3,7 @@ using Mimi
 @defcomp damages begin
     regions = Index()
 
-    DAMFRAC     = Variable(index=[time, regions])   #Increase in temperature of atmosphere (degrees C from 1900)
+    DAMFRAC     = Variable(index=[time, regions])   #Damages as % of GDP
     DAMAGES     = Variable(index=[time, regions])   #Damages (trillions 2005 USD per year)
 
     TATM        = Parameter(index=[time])   #Increase temperature of atmosphere (degrees C from 1900)
