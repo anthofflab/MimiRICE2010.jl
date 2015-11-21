@@ -7,7 +7,9 @@ include("../src/rice2010.jl")
 m = getrice();
 run(m)
 
-f=openxl("../data/RICE_2010_base_000.xlsm")
+parameter_filename = joinpath(dirname(@__FILE__), "..", "data", "RICE_2010_base_000.xlsm")
+
+f=openxl(parameter_filename)
 regions = ["US", "EU", "Japan", "Russia", "Eurasia", "China", "India", "MidEast", "Africa", "LatAm", "OHI", "OthAsia"]
 
 #Function to get true values form Rice2010 Excel
