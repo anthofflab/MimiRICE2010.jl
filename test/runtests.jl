@@ -2,7 +2,7 @@ using Base.Test
 using ExcelReaders
 using Mimi
 
-include("rice2010.jl")
+include("../src/rice2010.jl")
 
 m = getrice();
 run(m)
