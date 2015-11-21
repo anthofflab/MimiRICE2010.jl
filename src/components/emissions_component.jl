@@ -17,9 +17,7 @@ using Mimi
 end
 
 function timestep(state::emissions, t::Int)
-    v = state.Variables
-    p = state.Parameters
-    d = state.Dimensions
+    v, p, d = getvpd(state)
 
     #Define function for EIND
     for r in d.regions

@@ -18,10 +18,7 @@ using Mimi
 end
 
 function timestep(state::grosseconomy, t::Int)
-    v = state.Variables
-    p = state.Parameters
-    d = state.Dimensions
-
+    v, p, d = getvpd(state)
 
     #Define function for K
     for r in d.regions

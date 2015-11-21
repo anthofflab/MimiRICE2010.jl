@@ -17,10 +17,7 @@ end
 
 
 function timestep(state::damages, t::Int)
-    v = state.Variables
-    p = state.Parameters
-    d = state.Dimensions
-
+    v, p, d = getvpd(state)
 
     #Define function for DAMFRAC
     for r in d.regions

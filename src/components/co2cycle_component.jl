@@ -27,10 +27,7 @@ using Mimi
  end
 
  function timestep(state::co2cycle, t::Int)
-    v = state.Variables
-    p = state.Parameters
-    d = state.Dimensions
-
+    v, p, d = getvpd(state)
 
     #Define function for MAT
     if t==1
