@@ -8,7 +8,7 @@ function getindexfromyear_rice_2010(year)
     return div(year - baseyear, 10) + 1
 end
 
-function getparams(f, range::String, parameters, regions, T)
+function getparams(f, range::AbstractString, parameters, regions, T)
     if parameters == :single
         vals= Array(Float64,length(regions))
         i=1

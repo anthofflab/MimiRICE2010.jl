@@ -84,7 +84,7 @@ function constructrice(p)
 
     m = Model()
 
-    setindex(m, :time, [2005:10:2595])
+    setindex(m, :time, collect(2005:10:2595))
     setindex(m, :regions, ["US", "EU", "Japan", "Russia", "Eurasia", "China", "India", "MidEast", "Africa", "LatAm", "OHI", "OthAsia"])
 
     addcomponent(m, grosseconomy, :grosseconomy)

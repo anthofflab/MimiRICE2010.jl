@@ -11,7 +11,7 @@ f=openxl("../data/RICE_2010_base_000.xlsm")
 regions = ["US", "EU", "Japan", "Russia", "Eurasia", "China", "India", "MidEast", "Africa", "LatAm", "OHI", "OthAsia"]
 
 #Function to get true values form Rice2010 Excel
-function Truth(range::String)
+function Truth(range::AbstractString)
 	true_vals=Array(Float64, 60, length(regions))
         i=1
         for r = regions
