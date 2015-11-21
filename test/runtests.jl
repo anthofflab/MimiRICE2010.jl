@@ -15,16 +15,14 @@ regions = ["US", "EU", "Japan", "Russia", "Eurasia", "China", "India", "MidEast"
 #Function to get true values form Rice2010 Excel
 function Truth(range::AbstractString)
 	true_vals=Array(Float64, 60, length(regions))
-        i=1
-        for r = regions
-            data=readxl(f,"$r\!$range")
-            for n=1:60
-            	true_vals[n,i] = data[n]
-            end
-            i+=1
+    for (i,r) = enumerate(regions)
+        data=readxl(f,"$r\!$range")
+        for n=1:60
+			true_vals[n,i] = data[n]
         end
-        return true_vals
     end
+    return true_vals
+end
 
 #Test Precision
 Precision = 1.0e-11
