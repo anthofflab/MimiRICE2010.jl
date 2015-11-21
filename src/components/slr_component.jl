@@ -1,6 +1,8 @@
 using Mimi
 
 @defcomp sealevelrise begin
+    regions = Index()
+
     SLRTHERM        = Variable(index=[time])
     THERMEQUIL      = Variable(index=[time])
     GSICREMAIN      = Variable(index=[time])
