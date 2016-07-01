@@ -6,5 +6,6 @@ pipelines:
   default:
     - step:
         script: # Modify the commands below to build your repository.
-          - julia -e 'Pkg.add("Mimi")' 
-          - julia -e 'Pkg.test("Mimi")'
+          - julia -e 'Pkg.add("Mimi")'
+          - julia -e 'Pkg.add("ExcelReaders")'
+          - julia test/runtests.jl
