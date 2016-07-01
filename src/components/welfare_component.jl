@@ -23,7 +23,11 @@ function run_timestep(state::welfare, t::Int)
 
     #Define function for PERIODU #NEED TO ADD IF STATEMENT LIKE IN JUMP MODEL OR IS THAT ONLY ISSUES WHEN ELASMU = 1.0?
     for r in d.regions
-        v.PERIODU[t,r] = ((1./(1.-p.elasmu[r])) * (p.CPC[t,r])^(1.-p.elasmu[r]) + 1.) * p.alpha[t,r]
+        if p.elasmu[r]==1.
+            v.PERIODU[t,r] = log(p.CPC[t,r]) * p.alpha[t,r]
+        else
+            v.PERIODU[t,r] = ((1./(1.-p.elasmu[r])) * (p.CPC[t,r])^(1.-p.elasmu[r]) + 1.) * p.alpha[t,r]
+        end
     end
 
     #Define function for CEMUTOTPER
