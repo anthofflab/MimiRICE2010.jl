@@ -124,12 +124,7 @@ function getrice2010parameters(filename)
         end
 
     # Fraction of emissions in control regime
-    partfract = Array(Float64, 60, length(regions))
-        for r=1:length(regions)
-            for i=1:T
-                partfract[i,r] = 1.0
-            end
-        end
+    partfract = ones(60, length(regions))
 
     #Savings Rate (base case RICE2010)
     savings = getparams(f, "B97:BI97", :all, regions, T)
