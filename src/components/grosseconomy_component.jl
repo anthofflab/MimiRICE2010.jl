@@ -17,7 +17,7 @@ using Mimi
     L = Variable(index=[time, regions])
 end
 
-function timestep(state::grosseconomy, t::Int)
+function run_timestep(state::grosseconomy, t::Int)
     v, p, d = getvpd(state)
 
     #Define function for K

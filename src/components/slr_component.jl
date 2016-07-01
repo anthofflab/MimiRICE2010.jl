@@ -48,7 +48,7 @@ using Mimi
     fullExcelCompat::Bool = Parameter()
 end
 
-function timestep(state::sealevelrise, t::Int)
+function run_timestep(state::sealevelrise, t::Int)
     v, p, d = getvpd(state)
 
 #THERMAL EXPANSION

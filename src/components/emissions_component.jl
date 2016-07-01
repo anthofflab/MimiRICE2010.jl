@@ -14,7 +14,7 @@ using Mimi
     MIU     = Parameter(index=[time, regions])  #Emission control rate GHGs
 end
 
-function timestep(state::emissions, t::Int)
+function run_timestep(state::emissions, t::Int)
     v, p, d = getvpd(state)
 
     #Define function for EIND

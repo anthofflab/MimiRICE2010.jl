@@ -16,7 +16,7 @@ using Mimi
 end
 
 
-function timestep(state::damages, t::Int)
+function run_timestep(state::damages, t::Int)
     v, p, d = getvpd(state)
 
     #Define function for DAMFRAC

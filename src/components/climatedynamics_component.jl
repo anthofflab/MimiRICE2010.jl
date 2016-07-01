@@ -17,7 +17,7 @@ using Mimi
     c4 = Parameter()                    #Transfer coefficient for lower level
 end
 
-function timestep(state::climatedynamics, t::Int)
+function run_timestep(state::climatedynamics, t::Int)
     v, p, d = getvpd(state)
 
     #Define function for TATM

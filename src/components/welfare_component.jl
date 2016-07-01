@@ -18,7 +18,7 @@ using Mimi
     alpha   = Parameter(index=[time, regions])
 end
 
-function timestep(state::welfare, t::Int)
+function run_timestep(state::welfare, t::Int)
     v, p, d = getvpd(state)
 
     #Define function for PERIODU #NEED TO ADD IF STATEMENT LIKE IN JUMP MODEL OR IS THAT ONLY ISSUES WHEN ELASMU = 1.0?

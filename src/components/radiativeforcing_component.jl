@@ -10,7 +10,7 @@ using Mimi
     fco22x   = Parameter()              #Forcings of equilibrium CO2 doubling (Wm-2)
 end
 
-function timestep(state::radiativeforcing, t::Int)
+function run_timestep(state::radiativeforcing, t::Int)
     v, p, d = getvpd(state)
 
     #Define function for FORC
