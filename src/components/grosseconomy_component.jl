@@ -1,17 +1,17 @@
 using Mimi
 
 @defcomp grosseconomy begin
-    regions = Index()           #Following from FUND
+    regions = Index()
 
-    YGROSS  = Variable(index=[time, regions])   #Gross world product GROSS of abatement and damages (trillions 2005 USD per year)
-    K       = Variable(index=[time, regions])   #Capital stock (trillions 2005 US dollars)
+    YGROSS = Variable(index=[time, regions]) # Gross world product GROSS of abatement and damages (trillions 2005 USD per year)
+    K = Variable(index=[time, regions]) # Capital stock (trillions 2005 US dollars)
 
-    al      = Parameter(index=[time, regions])  #Level of total factor productivity
-    l       = Parameter(index=[time, regions])  #Level of population and labor
-    I       = Parameter(index=[time, regions])  #Investment (trillions 2005 USD per year)
-    gama    = Parameter()              #Capital elasticity in production function
-    dk      = Parameter(index=[regions])               #Depreciation rate on capital (per year)
-    k0      = Parameter(index=[regions])               #Initial capital value (trill 2005 USD)
+    al = Parameter(index=[time, regions]) # Level of total factor productivity
+    l = Parameter(index=[time, regions]) # Level of population and labor
+    I = Parameter(index=[time, regions]) # Investment (trillions 2005 USD per year)
+    gama = Parameter() # Capital elasticity in production function
+    dk = Parameter(index=[regions]) # Depreciation rate on capital (per year)
+    k0 = Parameter(index=[regions]) # Initial capital value (trill 2005 USD)
 
     # TODO remove this, just a temporary output trick
     L = Variable(index=[time, regions])

@@ -3,19 +3,19 @@ using Mimi
 @defcomp welfare begin
     regions = Index()
 
-    PERIODU         = Variable(index=[time, regions])       #One period utility function
-    CEMUTOTPER      = Variable(index=[time, regions])       #Period utility
-    REGCUMCEMUTOTPER    = Variable(index=[time, regions])   #Cumulative period utility
-    REGUTILITY          = Variable(index=[regions])             #Welfare Function
-    UTILITY            = Variable()
+    PERIODU = Variable(index=[time, regions]) # One period utility function
+    CEMUTOTPER = Variable(index=[time, regions]) # Period utility
+    REGCUMCEMUTOTPER = Variable(index=[time, regions]) # Cumulative period utility
+    REGUTILITY = Variable(index=[regions]) # Welfare Function
+    UTILITY = Variable()
 
-    CPC     = Parameter(index=[time, regions])
-    l       = Parameter(index=[time, regions])  #Level of population and labor
-    elasmu  = Parameter(index=[regions])                #Elasticity of marginal utility of consumption
-    rr      = Parameter(index=[time, regions])  #Average utility social discount rate
-    scale1  = Parameter(index=[regions])                #Multiplicative scaling coefficient
-    scale2  = Parameter(index=[regions])                #Additive scaling coefficient
-    alpha   = Parameter(index=[time, regions])
+    CPC = Parameter(index=[time, regions])
+    l = Parameter(index=[time, regions]) # Level of population and labor
+    elasmu = Parameter(index=[regions]) # Elasticity of marginal utility of consumption
+    rr = Parameter(index=[time, regions]) # Average utility social discount rate
+    scale1 = Parameter(index=[regions]) # Multiplicative scaling coefficient
+    scale2 = Parameter(index=[regions]) # Additive scaling coefficient
+    alpha = Parameter(index=[time, regions])
 end
 
 function run_timestep(state::welfare, t::Int)

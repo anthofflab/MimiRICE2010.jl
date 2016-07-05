@@ -3,46 +3,46 @@ using Mimi
 @defcomp sealevelrise begin
     regions = Index()
 
-    SLRTHERM        = Variable(index=[time])
-    THERMEQUIL      = Variable(index=[time])
-    GSICREMAIN      = Variable(index=[time])
-    GSICCUM         = Variable(index=[time])
-    GSICMELTRATE    = Variable(index=[time])
-    GISREMAIN       = Variable(index=[time])
-    GISMELTRATE     = Variable(index=[time])
-    GISEXPONENT     = Variable(index=[time])
-    GISCUM          = Variable(index=[time])
-    AISREMAIN       = Variable(index=[time])
-    AISMELTRATE     = Variable(index=[time])
-    AISCUM          = Variable(index=[time])
-    TOTALSLR        = Variable(index=[time])
-    SLRDAMAGES      = Variable(index=[time, regions])
+    SLRTHERM = Variable(index=[time])
+    THERMEQUIL = Variable(index=[time])
+    GSICREMAIN = Variable(index=[time])
+    GSICCUM = Variable(index=[time])
+    GSICMELTRATE = Variable(index=[time])
+    GISREMAIN = Variable(index=[time])
+    GISMELTRATE = Variable(index=[time])
+    GISEXPONENT = Variable(index=[time])
+    GISCUM = Variable(index=[time])
+    AISREMAIN = Variable(index=[time])
+    AISMELTRATE = Variable(index=[time])
+    AISCUM = Variable(index=[time])
+    TOTALSLR = Variable(index=[time])
+    SLRDAMAGES = Variable(index=[time, regions])
 
-    TATM            = Parameter(index=[time])
-    thermeq         = Parameter()
-    therm0          = Parameter()
-    thermadj        = Parameter()
-    gsictotal       = Parameter()
-    gsicmelt        = Parameter()
-    gsicexp         = Parameter()
-    gis0            = Parameter()
-    gismelt0        = Parameter()
-    gismeltabove    = Parameter()
-    gismineq        = Parameter()
-    gisexp          = Parameter()
-    aismelt0        = Parameter()
-    aismeltlow      = Parameter()
-    aismeltup       = Parameter()
-    aisratio        = Parameter()
-    aisinflection   = Parameter()
-    aisintercept    = Parameter()
-    aiswais         = Parameter()
-    aisother        = Parameter()
-    slrmultiplier   = Parameter(index=[regions])
-    slrelasticity   = Parameter(index=[regions])
-    slrdamlinear    = Parameter(index=[regions])
+    TATM = Parameter(index=[time])
+    thermeq = Parameter()
+    therm0 = Parameter()
+    thermadj = Parameter()
+    gsictotal = Parameter()
+    gsicmelt = Parameter()
+    gsicexp = Parameter()
+    gis0 = Parameter()
+    gismelt0 = Parameter()
+    gismeltabove = Parameter()
+    gismineq = Parameter()
+    gisexp = Parameter()
+    aismelt0 = Parameter()
+    aismeltlow = Parameter()
+    aismeltup = Parameter()
+    aisratio = Parameter()
+    aisinflection = Parameter()
+    aisintercept = Parameter()
+    aiswais = Parameter()
+    aisother = Parameter()
+    slrmultiplier = Parameter(index=[regions])
+    slrelasticity = Parameter(index=[regions])
+    slrdamlinear = Parameter(index=[regions])
     slrdamquadratic = Parameter(index=[regions])
-    YGROSS          = Parameter(index=[time, regions])
+    YGROSS = Parameter(index=[time, regions])
 
     # Run in full compatability mode with the Excel version
     fullExcelCompat::Bool = Parameter()
@@ -62,9 +62,6 @@ function run_timestep(state::sealevelrise, t::Int)
     else
         v.SLRTHERM[t] = v.SLRTHERM[t-1] + p.thermadj * (v.THERMEQUIL[t] - v.SLRTHERM[t-1])
     end
-
-
-
 
 #GLACIERS AND SMALL ICE CAPS (GSIC)
 
@@ -88,9 +85,6 @@ function run_timestep(state::sealevelrise, t::Int)
     else
         v.GSICCUM[t] = v.GSICCUM[t-1] + v.GSICMELTRATE[t]
     end
-
-
-
 
 #GREENLAND ICE SHEETS (GIS)
 
@@ -122,9 +116,6 @@ function run_timestep(state::sealevelrise, t::Int)
         v.GISEXPONENT[t] = 1. - (v.GISCUM[t] / p.gis0)^p.gisexp
     end
 
-
-
-
 #ANTARCTIC ICE SHEET (AIS)
 
     #Define function for AISMELTRATE
@@ -148,9 +139,6 @@ function run_timestep(state::sealevelrise, t::Int)
         v.AISREMAIN[t] = v.AISREMAIN[1] - v.AISCUM[t]
     end
 
-
-
-
 #TOTAL SEA LEVEL RISE AND DAMAGES
 
     #Define function for TOTALSLR
@@ -164,5 +152,4 @@ function run_timestep(state::sealevelrise, t::Int)
             v.SLRDAMAGES[t,r] = 100. * p.slrmultiplier[r] * (v.TOTALSLR[t-1] * p.slrdamlinear[r] + v.TOTALSLR[t-1]^2 * p.slrdamquadratic[r]) * (p.YGROSS[t-1,r] / p.YGROSS[1,r])^(1/p.slrelasticity[r])
         end
     end
-
 end

@@ -3,15 +3,15 @@ using Mimi
 @defcomp emissions begin
     regions = Index()
 
-    E       = Variable(index=[time])   #Total CO2 emissions (GtCO2 per year)
-    EIND    = Variable(index=[time, regions])   #Industrial emissions (GtCO2 per year)
-    CCA     = Variable(index=[time])   #Cumulative indiustrial emissions
+    E = Variable(index=[time]) # Total CO2 emissions (GtCO2 per year)
+    EIND = Variable(index=[time, regions]) # Industrial emissions (GtCO2 per year)
+    CCA = Variable(index=[time]) # Cumulative indiustrial emissions
 
-    sigma   = Parameter(index=[time, regions])  #CO2-equivalent-emissions output ratio
-    YGROSS  = Parameter(index=[time, regions])  #Gross world product GROSS of abatement and damages (trillions 2005 USD per year)
-    etree   = Parameter(index=[time])  #Emissions from deforestation
+    sigma = Parameter(index=[time, regions]) # CO2-equivalent-emissions output ratio
+    YGROSS = Parameter(index=[time, regions]) # Gross world product GROSS of abatement and damages (trillions 2005 USD per year)
+    etree = Parameter(index=[time]) # Emissions from deforestation
 
-    MIU     = Parameter(index=[time, regions])  #Emission control rate GHGs
+    MIU = Parameter(index=[time, regions]) # Emission control rate GHGs
 end
 
 function run_timestep(state::emissions, t::Int)
@@ -31,5 +31,4 @@ function run_timestep(state::emissions, t::Int)
     else
         v.CCA[t] =  v.CCA[t-1] + (sum(v.EIND[t,:]) * 10.)
     end
-
 end

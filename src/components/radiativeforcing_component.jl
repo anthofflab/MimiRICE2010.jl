@@ -1,13 +1,13 @@
 using Mimi
 
 @defcomp radiativeforcing begin
-    FORC     = Variable(index=[time])   #Increase in radiative forcing (watts per m^2 from 1900)
+    FORC = Variable(index=[time]) # Increase in radiative forcing (watts per m^2 from 1900)
 
-    MAT      = Parameter(index=[time])  #Carbon concentration increase in atmosphere (GtC from 1750)
-    MATSUM   = Parameter(index=[time])  #Sum of MAT[t] and MAT[t+1] to use in FORC[t] for radiativeforcing component
-    mat1     = Parameter()
-    forcoth  = Parameter(index=[time])  #Exogenous forcing for other greenhouse gases
-    fco22x   = Parameter()              #Forcings of equilibrium CO2 doubling (Wm-2)
+    MAT = Parameter(index=[time]) # Carbon concentration increase in atmosphere (GtC from 1750)
+    MATSUM = Parameter(index=[time]) #Sum of MAT[t] and MAT[t+1] to use in FORC[t] for radiativeforcing component
+    mat1 = Parameter()
+    forcoth = Parameter(index=[time]) # Exogenous forcing for other greenhouse gases
+    fco22x = Parameter() # Forcings of equilibrium CO2 doubling (Wm-2)
 end
 
 function run_timestep(state::radiativeforcing, t::Int)

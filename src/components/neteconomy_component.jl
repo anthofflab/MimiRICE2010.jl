@@ -3,26 +3,25 @@ using Mimi
 @defcomp neteconomy begin
     regions = Index()
 
-    YNET        = Variable(index=[time, regions])   #Output net of damages equation (trillions 2005 USD per year)
-    ABATECOST   = Variable(index=[time, regions])   #Cost of emissions reductions  (trillions 2005 USD per year)
-    MCABATE     = Variable(index=[time, regions])   #Marginal cost of abatement (2005$ per ton CO2)
-    Y           = Variable(index=[time, regions])   #Gross world product net of abatement and damages (trillions 2005 USD per year)
-    I           = Variable(index=[time, regions])   #Investment (trillions 2005 USD per year)
-    C           = Variable(index=[time, regions])    #Consumption (trillions 2005 US dollars per year)
-    CPC         = Variable(index=[time, regions])   #Per capita consumption (thousands 2005 USD per year)
-    CPRICE      = Variable(index=[time, regions])   #Carbon price (2005$ per ton of CO2)
+    YNET = Variable(index=[time, regions]) # Output net of damages equation (trillions 2005 USD per year)
+    ABATECOST = Variable(index=[time, regions]) # Cost of emissions reductions  (trillions 2005 USD per year)
+    MCABATE = Variable(index=[time, regions]) # Marginal cost of abatement (2005$ per ton CO2)
+    Y = Variable(index=[time, regions]) # Gross world product net of abatement and damages (trillions 2005 USD per year)
+    I = Variable(index=[time, regions]) # Investment (trillions 2005 USD per year)
+    C = Variable(index=[time, regions]) # Consumption (trillions 2005 US dollars per year)
+    CPC = Variable(index=[time, regions]) # Per capita consumption (thousands 2005 USD per year)
+    CPRICE = Variable(index=[time, regions]) # Carbon price (2005$ per ton of CO2)
 
-    YGROSS      = Parameter(index=[time, regions])  #Gross world product GROSS of abatement and damages (trillions 2005 USD per year)
-    DAMFRAC     = Parameter(index=[time, regions])  #Damages as fraction of gross output
-    DAMAGES     = Parameter(index=[time, regions])  #Damages (trillions 2005 USD per year)
-    cost1       = Parameter(index=[time, regions])  #Adjusted cost for backstop
-    MIU         = Parameter(index=[time, regions])  #Emission control rate GHGs
-    expcost2    = Parameter(index=[regions])                #Exponent of control cost function
-    partfract   = Parameter(index=[time, regions])  #Fraction of emissions in control regime
-    pbacktime   = Parameter(index=[time, regions])  #Backstop price
-    S           = Parameter(index=[time, regions])  #Gross savings rate as fraction of gross world product
-    l           = Parameter(index=[time, regions])  #Level of population and labor
-
+    YGROSS = Parameter(index=[time, regions]) # Gross world product GROSS of abatement and damages (trillions 2005 USD per year)
+    DAMFRAC = Parameter(index=[time, regions]) # Damages as fraction of gross output
+    DAMAGES = Parameter(index=[time, regions]) # Damages (trillions 2005 USD per year)
+    cost1 = Parameter(index=[time, regions]) # Adjusted cost for backstop
+    MIU = Parameter(index=[time, regions]) # Emission control rate GHGs
+    expcost2 = Parameter(index=[regions]) # Exponent of control cost function
+    partfract = Parameter(index=[time, regions]) # Fraction of emissions in control regime
+    pbacktime = Parameter(index=[time, regions]) # Backstop price
+    S = Parameter(index=[time, regions]) # Gross savings rate as fraction of gross world product
+    l = Parameter(index=[time, regions]) # Level of population and labor
 end
 
 function run_timestep(state::neteconomy, t::Int)
