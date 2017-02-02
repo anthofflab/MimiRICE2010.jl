@@ -114,8 +114,8 @@ function getrice2010parameters(filename)
 
     # Exogenous forcing for other greenhouse gases
     forcoth =  Array(Float64, 60)
+    data = readxl(f, "Global!B21:BI21")
     for i=1:T
-        data = readxl(f, "Global!B21:BI21")
         forcoth[i] = data[i]
     end
 
