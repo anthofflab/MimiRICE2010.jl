@@ -48,13 +48,12 @@ function run_timestep(state::welfare, t::Int)
         end
     end
 
-    #Define function for REGUTILITY
-    for r in d.regions
-        v.REGUTILITY[r] = 10 * p.scale1[r] * v.REGCUMCEMUTOTPER[60,r] + p.scale2[r]
-    end
-
-    #Define function for UTILITY
-    for r in d.regions
+    if t==60
+        #Define function for REGUTILITY
+        for r in d.regions
+            v.REGUTILITY[r] = 10 * p.scale1[r] * v.REGCUMCEMUTOTPER[t,r] + p.scale2[r]
+        end
+        #Define function for UTILITY
         v.UTILITY = sum(v.REGUTILITY[:])
     end
 end
