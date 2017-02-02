@@ -67,5 +67,8 @@ True_TOTALSLR = vec(readxl(f,"SLR!B62:BI62"))
 True_SLRDAMAGES = Truth("B50:BI50")
 @test_approx_eq_eps maxabs(m[:sealevelrise, :SLRDAMAGES] .- True_SLRDAMAGES) 0. Precision
 
+True_PERIODUTILITY = Truth("B94:BI94")
+@test_approx_eq_eps maxabs(m[:welfare, :CEMUTOTPER] .- True_PERIODUTILITY) 0. Precision
+
 True_UTILITY = readxl(f,"Global!B77:B77")
 @test_approx_eq_eps maxabs(m[:welfare, :UTILITY] .- True_UTILITY) 0. Precision
