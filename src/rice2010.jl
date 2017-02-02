@@ -107,6 +107,11 @@ function constructrice(p)
     setparameter(m, :emissions, :sigma, sigma)
     setparameter(m, :emissions, :MIU, MIU)
     setparameter(m, :emissions, :etree, etree)
+    setparameter(m, :emissions, :cost1, cost1 )
+    setparameter(m, :emissions, :MIU, MIU)
+    setparameter(m, :emissions, :expcost2, expcost2)
+    setparameter(m, :emissions, :partfract, partfract)
+    setparameter(m, :emissions, :pbacktime, pbacktime)
 
     connectparameter(m, :emissions, :YGROSS, :grosseconomy, :YGROSS)
 
@@ -184,17 +189,13 @@ function constructrice(p)
     connectparameter(m, :damages, :SLRDAMAGES, :sealevelrise, :SLRDAMAGES)
 
     # NET ECONOMY COMPONENT
-    setparameter(m, :neteconomy, :cost1, cost1 )
-    setparameter(m, :neteconomy, :MIU, MIU)
-    setparameter(m, :neteconomy, :expcost2, expcost2)
-    setparameter(m, :neteconomy, :partfract, partfract)
-    setparameter(m, :neteconomy, :pbacktime, pbacktime)
     setparameter(m, :neteconomy, :S, savings)
     setparameter(m, :neteconomy, :l, l)
 
     connectparameter(m, :neteconomy, :YGROSS, :grosseconomy, :YGROSS)
     connectparameter(m, :neteconomy, :DAMFRAC, :damages, :DAMFRAC)
     connectparameter(m, :neteconomy, :DAMAGES, :damages, :DAMAGES)
+    connectparameter(m, :neteconomy, :ABATECOST, :emissions, :ABATECOST)
 
     # WELFARE COMPONENT
     setparameter(m, :welfare, :l, l )
