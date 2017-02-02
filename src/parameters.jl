@@ -106,14 +106,10 @@ function getrice2010parameters(filename)
     regtree = getparams(f, "B43:BI43", :all, regions, T) # Regional Emissions from Land Use Change
     rr = getparams(f, "B17:BI17", :all, regions, T) # Social Time Preference Factor
 
-    # Global Emissions from Land Use Change (Sum of regional emissions for use in RICE model)
-    etree =  Array(Float64, T)
-    for i=1:T
-        x=0.0
-        for r = 1:length(regions)
-            x += regtree[i,r]
-            etree[i]=x
-        end
+    # Global Emissions from Land Use Change (Sum of regional emissions for land use change in RICE model)
+    etree = Array(Float64, T)
+    for i = 1:T
+        etree[i] = sum(regtree[i,:])
     end
 
     # Exogenous forcing for other greenhouse gases
