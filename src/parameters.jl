@@ -20,17 +20,17 @@ function getrice2010parameters(filename)
     ifopt = true # Indicator where optimized is 1 and base is 0
 
     # Preferences
-    elasmu =  getparams(f, "B18:B18", :single, regions, T) # Elasticity of MU of consumption
-    prstp =  getparams(f, "B15:B15", :single, regions, T) # Rate of Social Time Preference
+    elasmu =  getparam_single(f, "B18:B18", regions) # Elasticity of MU of consumption
+    prstp =  getparam_single(f, "B15:B15", regions) # Rate of Social Time Preference
 
     # Population and technology
 
     # Capital elasticity in production function
     gama = 0.300
-    dk  = getparams(f, "B8:B8", :single, regions, T) # Depreciation rate on capital (per year)
-    k0 = getparams(f, "B11:B11", :single, regions, T) #Initial capital
-    miu0 = getparams(f, "B103:B103", :single, regions, T) # Initial emissions control rate for base case 2010
-    miubase = getparams(f, "B103:BI103", :all, regions, T) # Optimized emission control rate results from RICE2010 (base case)
+    dk  = getparam_single(f, "B8:B8", regions) # Depreciation rate on capital (per year)
+    k0 = getparam_single(f, "B11:B11", regions) #Initial capital
+    miu0 = getparam_single(f, "B103:B103", regions) # Initial emissions control rate for base case 2010
+    miubase = getparam_timeseries(f, "B103:BI103", regions, T) # Optimized emission control rate results from RICE2010 (base case)
 
     # Carbon cycle
 
@@ -68,17 +68,17 @@ function getrice2010parameters(filename)
     fco22x = 3.8 # Forcings of equilibrium CO2 doubling (Wm-2)
 
     # Climate damage parameters
-    a1 = getparams(f, "B24:B24", :single, regions, T) # Damage intercept
-    a2 = getparams(f, "B25:B25", :single, regions, T) # Damage quadratic term
-    a3 = getparams(f, "B26:B26", :single, regions, T) # Damage exponent
+    a1 = getparam_single(f, "B24:B24", regions) # Damage intercept
+    a2 = getparam_single(f, "B25:B25", regions) # Damage quadratic term
+    a3 = getparam_single(f, "B26:B26", regions) # Damage exponent
 
     # Welfare Weights
     alpha0 = transpose(readxl(f, "Data!B359:BI370")) # Read in alpha
-    alpha=convert(Array{Float64}, alpha0) # Convert to type used by Mimi
+    alpha = convert(Array{Float64}, alpha0) # Convert to type used by Mimi
 
     # Abatement cost
     # Exponent of control cost function
-    expcost2 = getparams(f, "B38:B38", :single, regions, T)
+    expcost2 = getparam_single(f, "B38:B38", regions)
 
     # Availability of fossil fuels
     # Maximum cumulative extraction fossil fuels (GtC)
@@ -86,7 +86,7 @@ function getrice2010parameters(filename)
 
     # Scaling parameters
     # Multiplicative scaling coefficient
-    scale1 = getparams(f, "B52:B52", :single, regions, T)
+    scale1 = getparam_single(f, "B52:B52", regions)
 
     # Additive scaling coefficient (combines two additive scaling coefficients from RICE for calculating utility with welfare weights)
     scale2 = Array(Float64, length(regions))
@@ -96,15 +96,15 @@ function getrice2010parameters(filename)
     end
 
 
-    savebase = getparams(f, "B97:BI97", :all, regions, T) # Optimized savings rate in base case for RICE2010
-    optlrsav = getparams(f, "BI97:BI97", :single, regions, T) # Optimized savings rate in base case for RICE2010 for last period (fraction of gross output)
-    l = getparams(f, "B56:BI56", :all, regions, T) # Level of population and labor
-    al = getparams(f, "B20:BI20", :all, regions, T) # Level of total factor productivity
-    sigma = getparams(f, "B40:BI40", :all, regions, T) # CO2-equivalent-emissions output ratio
-    pbacktime = getparams(f, "B36:BI36", :all, regions, T) # Backstop price
-    cost1 = getparams(f, "B31:BI31", :all, regions, T) # Adjusted cost for backstop
-    regtree = getparams(f, "B43:BI43", :all, regions, T) # Regional Emissions from Land Use Change
-    rr = getparams(f, "B17:BI17", :all, regions, T) # Social Time Preference Factor
+    savebase = getparam_timeseries(f, "B97:BI97", regions, T) # Optimized savings rate in base case for RICE2010
+    optlrsav = getparam_single(f, "BI97:BI97", regions) # Optimized savings rate in base case for RICE2010 for last period (fraction of gross output)
+    l = getparam_timeseries(f, "B56:BI56", regions, T) # Level of population and labor
+    al = getparam_timeseries(f, "B20:BI20", regions, T) # Level of total factor productivity
+    sigma = getparam_timeseries(f, "B40:BI40", regions, T) # CO2-equivalent-emissions output ratio
+    pbacktime = getparam_timeseries(f, "B36:BI36", regions, T) # Backstop price
+    cost1 = getparam_timeseries(f, "B31:BI31", regions, T) # Adjusted cost for backstop
+    regtree = getparam_timeseries(f, "B43:BI43", regions, T) # Regional Emissions from Land Use Change
+    rr = getparam_timeseries(f, "B17:BI17", regions, T) # Social Time Preference Factor
 
     # Global Emissions from Land Use Change (Sum of regional emissions for land use change in RICE model)
     etree = Array(Float64, T)
@@ -123,16 +123,16 @@ function getrice2010parameters(filename)
     partfract = ones(60, length(regions))
 
     # Savings Rate (base case RICE2010)
-    savings = getparams(f, "B97:BI97", :all, regions, T)
+    savings = getparam_timeseries(f, "B97:BI97", regions, T)
 
     # MIU (base case RICE2010)
-    MIU = getparams(f, "B103:BI103", :all, regions, T)
+    MIU = getparam_timeseries(f, "B103:BI103", regions, T)
 
     # SEA LEVEL RISE PARAMETERS
-    slrmultiplier = getparams(f, "B49:B49", :single, regions, T) # Multiplier for SLR
-    slrelasticity = getparams(f, "C49:C49", :single, regions, T) # SLR elasticity of substitution
-    slrdamlinear = getparams(f, "B48:B48", :single, regions, T) # SLR damage parameter (linear)
-    slrdamquadratic = getparams(f, "C48:C48", :single, regions, T) # SLR damage parameter (quadratic)
+    slrmultiplier = getparam_single(f, "B49:B49", regions) # Multiplier for SLR
+    slrelasticity = getparam_single(f, "C49:C49", regions) # SLR elasticity of substitution
+    slrdamlinear = getparam_single(f, "B48:B48", regions) # SLR damage parameter (linear)
+    slrdamquadratic = getparam_single(f, "C48:C48", regions) # SLR damage parameter (quadratic)
 
     # Thermal Expansion
     therm0 = readxl(f, "SLR!B9:B9")[1] # Thermal Expansion initial conditions (SLR per decade)
