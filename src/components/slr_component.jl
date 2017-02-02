@@ -16,7 +16,6 @@ using Mimi
     AISMELTRATE = Variable(index=[time])
     AISCUM = Variable(index=[time])
     TOTALSLR = Variable(index=[time])
-    SLRDAMAGES = Variable(index=[time, regions])
 
     TATM = Parameter(index=[time])
     thermeq = Parameter()
@@ -38,11 +37,6 @@ using Mimi
     aisintercept = Parameter()
     aiswais = Parameter()
     aisother = Parameter()
-    slrmultiplier = Parameter(index=[regions])
-    slrelasticity = Parameter(index=[regions])
-    slrdamlinear = Parameter(index=[regions])
-    slrdamquadratic = Parameter(index=[regions])
-    YGROSS = Parameter(index=[time, regions])
 
     # Run in full compatability mode with the Excel version
     fullExcelCompat::Bool = Parameter()
@@ -144,12 +138,4 @@ function run_timestep(state::sealevelrise, t::Int)
     #Define function for TOTALSLR
     v.TOTALSLR[t] = v.SLRTHERM[t] + v.GSICCUM[t] + v.GISCUM[t] + v.AISCUM[t]
 
-    #Define function for SLRDAMAGES
-    for r in d.regions
-        if t == 1
-            v.SLRDAMAGES[t,r] = 0.
-        else
-            v.SLRDAMAGES[t,r] = 100. * p.slrmultiplier[r] * (v.TOTALSLR[t-1] * p.slrdamlinear[r] + v.TOTALSLR[t-1]^2 * p.slrdamquadratic[r]) * (p.YGROSS[t-1,r] / p.YGROSS[1,r])^(1/p.slrelasticity[r])
-        end
-    end
 end
