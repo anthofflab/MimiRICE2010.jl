@@ -86,7 +86,7 @@ function getrice2010parameters(filename)
 
     # Scaling parameters
     # Multiplicative scaling coefficient
-    p[:scale1] = getparams(f, "B52:B52", :single, regions, T)
+    p[:scale1] = getparam_single(f, "B52:B52", regions)
     p[:scale1] = getparam_single(f, "B52:B52", regions)
 
     # Additive scaling coefficient (combines two additive scaling coefficients from RICE for calculating utility with welfare weights)
