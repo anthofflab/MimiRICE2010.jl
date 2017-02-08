@@ -172,7 +172,6 @@ function constructrice(p)
     setparameter(m, :sealevelrise, :aisintercept, aisintercept)
     setparameter(m, :sealevelrise, :aiswais, aiswais)
     setparameter(m, :sealevelrise, :aisother, aisother)
-    setparameter(m, :sealevelrise, :fullExcelCompat, true)
 
     connectparameter(m, :sealevelrise, :TATM, :climatedynamics, :TATM)
 

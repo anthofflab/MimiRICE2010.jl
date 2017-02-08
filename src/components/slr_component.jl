@@ -37,9 +37,6 @@ using Mimi
     aisintercept = Parameter()
     aiswais = Parameter()
     aisother = Parameter()
-
-    # Run in full compatability mode with the Excel version
-    fullExcelCompat::Bool = Parameter()
 end
 
 function run_timestep(state::sealevelrise, t::Int)
