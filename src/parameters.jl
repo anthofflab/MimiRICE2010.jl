@@ -1,4 +1,3 @@
-using Compat
 using ExcelReaders
 include("helpers.jl")
 
