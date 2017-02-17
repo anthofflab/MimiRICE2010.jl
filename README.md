@@ -12,6 +12,26 @@ Mimi-RICE-2010.jl is based on the version of RICE-2010 that can be downloaded
 uses the [Mimi framework](https://github.com/anthofflab/Mimi.jl) for
 integrated assessment models.
 
+## Software requirements
+
+You need to install [julia](http://julialang.org/) to run this model.
+
+## Preparing the software environment
+
+You need to install a number of packges to run the model. You can use the
+following julia code to do so:
+
+````julia
+Pkg.add("Mimi")
+Pkg.add("ExcelReaders")
+````
+
+## Running the model
+
+The model uses the [Mimi framework]() and it is highly recommended to
+read the Mimi documentation first to understand the code structure.
+To just run the model once, you can run the code in the file ``src/main.jl``.
+
 ## Known issues
 
 * Atmospheric CO2 concentrations in the years 2005 and 2015 are fixed in
