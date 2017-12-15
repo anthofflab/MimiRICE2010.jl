@@ -89,7 +89,7 @@ function getrice2010parameters(filename)
     p[:scale1] = getparam_single(f, "B52:B52", regions)
 
     # Additive scaling coefficient (combines two additive scaling coefficients from RICE for calculating utility with welfare weights)
-    scale2 = Array(Float64, length(regions))
+    scale2 = Array{Float64}(length(regions))
     for (i,r) in enumerate(regions)
         data = readxl(f, "$r\!B53:C53")
         scale2[i] = data[1] - data[2]
@@ -107,14 +107,14 @@ function getrice2010parameters(filename)
     p[:rr] = getparam_timeseries(f, "B17:BI17", regions, T) # Social Time Preference Factor
 
     # Global Emissions from Land Use Change (Sum of regional emissions for land use change in RICE model)
-    etree = Array(Float64, T)
+    etree = Array{Float64}(T)
     for i = 1:T
         etree[i] = sum(regtree[i,:])
     end
     p[:etree] = etree
 
     # Exogenous forcing for other greenhouse gases
-    forcoth =  Array(Float64, 60)
+    forcoth =  Array{Float64}(60)
     data = readxl(f, "Global!B21:BI21")
     for i=1:T
         forcoth[i] = data[i]
