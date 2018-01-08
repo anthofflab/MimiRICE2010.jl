@@ -27,6 +27,8 @@ end
 # Test Precision
 Precision = 1.0e-11
 
+@testset "mimi-rice-2010" begin
+
 # TATM Test (temperature increase)
 True_TATM = vec(readxl(f,"Global!B70:BI70"))
 @test maximum(abs, m[:climatedynamics, :TATM] .- True_TATM) ≈ 0. atol=Precision
@@ -72,3 +74,5 @@ True_PERIODUTILITY = Truth("B94:BI94")
 
 True_UTILITY = readxl(f,"Global!B77:B77")
 @test maximum(abs, m[:welfare, :UTILITY] .- True_UTILITY) ≈ 0. atol=Precision
+
+end
