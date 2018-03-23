@@ -12,22 +12,26 @@ using Mimi
     a1 = Parameter(index=[regions]) # Damage intercept
     a2 = Parameter(index=[regions]) # Damage quadratic term
     a3 = Parameter(index=[regions]) # Damage exponent
-end
 
-function run_timestep(state::damages, t::Int)
-    v, p, d = getvpd(state)
-
-    #Define function for DAMFRAC
-    for r in d.regions
-        v.DAMFRAC[t,r] = (((p.a1[r] * p.TATM[t]) + (p.a2[r] * p.TATM[t]^p.a3[r])) / 100) + (p.SLRDAMAGES[t,r] / 100)
-    end
-
-    #Define function for DAMAGES
-    for r in d.regions
-        if t==1
+    function init(p, v, d)
+        t = 1
+        for r in d.regions
             v.DAMAGES[t,r] = p.YGROSS[t,r] * (1 - 1 / (1+v.DAMFRAC[t,r]))
-        else
-            v.DAMAGES[t,r] = (p.YGROSS[t,r] * v.DAMFRAC[t,r]) / (1. + v.DAMFRAC[t,r]^10)
+        end 
+    end       
+
+    function run_timestep(p, v, d, t)
+
+        #Define function for DAMFRAC
+        for r in d.regions
+            v.DAMFRAC[t,r] = (((p.a1[r] * p.TATM[t]) + (p.a2[r] * p.TATM[t]^p.a3[r])) / 100) + (p.SLRDAMAGES[t,r] / 100)
+        end
+
+        #Define function for DAMAGES
+        if t > 1
+            for r in d.regions
+                v.DAMAGES[t,r] = (p.YGROSS[t,r] * v.DAMFRAC[t,r]) / (1. + v.DAMFRAC[t,r]^10)
+            end
         end
     end
 end

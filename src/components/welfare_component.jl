@@ -16,44 +16,48 @@ using Mimi
     scale1 = Parameter(index=[regions]) # Multiplicative scaling coefficient
     scale2 = Parameter(index=[regions]) # Additive scaling coefficient
     alpha = Parameter(index=[time, regions])
-end
 
-function run_timestep(state::welfare, t::Int)
-    v, p, d = getvpd(state)
-
-    #Define function for PERIODU #NEED TO ADD IF STATEMENT LIKE IN JUMP MODEL OR IS THAT ONLY ISSUES WHEN ELASMU = 1.0?
-    for r in d.regions
-        if p.elasmu[r]==1.
-            v.PERIODU[t,r] = log(p.CPC[t,r]) * p.alpha[t,r]
-        else
-            v.PERIODU[t,r] = ((1./(1.-p.elasmu[r])) * (p.CPC[t,r])^(1.-p.elasmu[r]) + 1.) * p.alpha[t,r]
-        end
-    end
-
-    #Define function for CEMUTOTPER
-    for r in d.regions
-       if t != 60
-            v.CEMUTOTPER[t,r] = v.PERIODU[t,r] * p.l[t,r] * p.rr[t,r]
-        else
-            v.CEMUTOTPER[t,r] = v.PERIODU[t,r] * p.l[t,r] * p.rr[t,r] / (1. - ((p.rr[t-1,r] / (1. + 0.015)^10) / p.rr[t-1,r]))
-        end
-    end
-
-    #Define function for REGCUMCEMUTOTPER
-    for r in d.regions
-        if t ==1
-            v.REGCUMCEMUTOTPER[t,r] = v.CEMUTOTPER[t,r]
-        else
-            v.REGCUMCEMUTOTPER[t,r] = v.REGCUMCEMUTOTPER[t-1, r] + v.CEMUTOTPER[t,r]
-        end
-    end
-
-    if t==60
-        #Define function for REGUTILITY
+    function init(p, v, d)
+        t = 1
         for r in d.regions
-            v.REGUTILITY[r] = 10 * p.scale1[r] * v.REGCUMCEMUTOTPER[t,r] + p.scale2[r]
+            v.REGCUMCEMUTOTPER[t,r] = v.CEMUTOTPER[t,r]            
         end
-        #Define function for UTILITY
-        v.UTILITY = sum(v.REGUTILITY[:])
+    end
+
+    function run_timestep(p, v, d, t)
+
+        #Define function for PERIODU #NEED TO ADD IF STATEMENT LIKE IN JUMP MODEL OR IS THAT ONLY ISSUES WHEN ELASMU = 1.0?
+        for r in d.regions
+            if p.elasmu[r]==1.
+                v.PERIODU[t,r] = log(p.CPC[t,r]) * p.alpha[t,r]
+            else
+                v.PERIODU[t,r] = ((1./(1.-p.elasmu[r])) * (p.CPC[t,r])^(1.-p.elasmu[r]) + 1.) * p.alpha[t,r]
+            end
+        end
+
+        #Define function for CEMUTOTPER
+        for r in d.regions
+            if t != 60
+                v.CEMUTOTPER[t,r] = v.PERIODU[t,r] * p.l[t,r] * p.rr[t,r]
+            else
+                v.CEMUTOTPER[t,r] = v.PERIODU[t,r] * p.l[t,r] * p.rr[t,r] / (1. - ((p.rr[t-1,r] / (1. + 0.015)^10) / p.rr[t-1,r]))
+            end
+        end
+
+        #Define function for REGCUMCEMUTOTPER
+        if t > 1
+            for r in d.regions
+                v.REGCUMCEMUTOTPER[t,r] = v.REGCUMCEMUTOTPER[t-1, r] + v.CEMUTOTPER[t,r]
+            end
+        end
+
+        if t==60
+            #Define function for REGUTILITY
+            for r in d.regions
+                v.REGUTILITY[r] = 10 * p.scale1[r] * v.REGCUMCEMUTOTPER[t,r] + p.scale2[r]
+            end
+            #Define function for UTILITY
+            v.UTILITY = sum(v.REGUTILITY[:])
+        end
     end
 end

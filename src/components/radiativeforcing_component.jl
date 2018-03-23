@@ -8,15 +8,17 @@ using Mimi
     mat1 = Parameter()
     forcoth = Parameter(index=[time]) # Exogenous forcing for other greenhouse gases
     fco22x = Parameter() # Forcings of equilibrium CO2 doubling (Wm-2)
-end
 
-function run_timestep(state::radiativeforcing, t::Int)
-    v, p, d = getvpd(state)
-
-    #Define function for FORC
-    if t==1
+    function init(p, v, d)
+        t = 1
         v.FORC[t] = p.fco22x * ((log10((((p.MAT[t] + p.mat1)/2)+0.000001)/596.4)/log10(2))) + p.forcoth[t]  #TEMP NOTE: Uses mat1 because it's given as a parameter...not calculated so couldn't use MATSUM
-    else
-        v.FORC[t] = p.fco22x * ((log10((((p.MATSUM[t])/2)+0.000001)/596.4)/log10(2))) + p.forcoth[t]
+    end
+
+    function run_timestep(p, v, d, t)
+
+        #Define function for FORC
+        if t > 1
+            v.FORC[t] = p.fco22x * ((log10((((p.MATSUM[t])/2)+0.000001)/596.4)/log10(2))) + p.forcoth[t]
+        end
     end
 end

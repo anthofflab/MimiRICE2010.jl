@@ -1,5 +1,8 @@
+using Mimi
+
 include("rice2010.jl")
+using rice2010
 
-m = getrice()
+run(RICE)
 
-run(m)
+explore(RICE)

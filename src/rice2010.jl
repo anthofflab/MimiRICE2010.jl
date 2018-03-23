@@ -1,7 +1,9 @@
+module rice2010
+
 using Mimi
 
+include("helpers.jl")
 include("parameters.jl")
-
 include("components/climatedynamics_component.jl")
 include("components/co2cycle_component.jl")
 include("components/damages_component.jl")
@@ -13,211 +15,146 @@ include("components/slr_component.jl")
 include("components/slrdamages_component.jl")
 include("components/welfare_component.jl")
 
-function constructrice(p)
-    al = p[:al]
-    l = p[:l]
-    gama = p[:gama]
-    dk = p[:dk]
-    k0 = p[:k0]
-    sigma = p[:sigma]
-    etree = p[:etree]
-    mat0 = p[:mat0]
-    mat1 = p[:mat1]
-    mu0 = p[:mu0]
-    ml0 = p[:ml0]
-    b12 = p[:b12]
-    b23 = p[:b23]
-    b11 = p[:b11]
-    b21 = p[:b21]
-    b22 = p[:b22]
-    b32 = p[:b32]
-    b33 = p[:b33]
-    forcoth = p[:forcoth]
-    fco22x = p[:fco22x]
-    t2xco2 = p[:t2xco2]
-    tatm0 = p[:tatm0]
-    tatm1 = p[:tatm1]
-    tocean0 = p[:tocean0]
-    c1 = p[:c1]
-    c3 = p[:c3]
-    c4 = p[:c4]
-    a1 = p[:a1]
-    a2 = p[:a2]
-    a3 = p[:a3]
-    cost1 = p[:cost1]
-    expcost2 = p[:expcost2]
-    partfract = p[:partfract]
-    pbacktime = p[:pbacktime]
-    elasmu = p[:elasmu]
-    alpha = p[:alpha]
-    rr = p[:rr]
-    scale1 = p[:scale1]
-    scale2 = p[:scale2]
-    thermeq = p[:thermeq]
-    therm0 = p[:therm0]
-    thermadj = p[:thermadj]
-    gsictotal = p[:gsictotal]
-    gsicmelt = p[:gsicmelt]
-    gsicexp = p[:gsicexp]
-    gis0 = p[:gis0]
-    gismelt0 = p[:gismelt0]
-    gismeltabove = p[:gismeltabove]
-    gismineq = p[:gismineq]
-    gisexp = p[:gisexp]
-    aismelt0 = p[:aismelt0]
-    aismeltlow = p[:aismeltlow]
-    aismeltup = p[:aismeltup]
-    aisratio = p[:aisratio]
-    aisinflection = p[:aisinflection]
-    aisintercept = p[:aisintercept]
-    aiswais = p[:aiswais]
-    aisother = p[:aisother]
-    slrmultiplier = p[:slrmultiplier]
-    slrelasticity = p[:slrelasticity]
-    slrdamlinear = p[:slrdamlinear]
-    slrdamquadratic = p[:slrdamquadratic]
+export getparam_single, getparam_timeseries, RICE
 
-    savings = p[:savings]
-    MIU = p[:MIU]
+#
+# N.B. See rice2010-defmodel.jl for the @defmodel version of the following
+#
 
-    m = Model()
+const global datafile = joinpath(dirname(@__FILE__), "..", "data", "RICE_2010_base_000.xlsm")
+p = getrice2010parameters(datafile)
 
-    setindex(m, :time, collect(2005:10:2595))
-    setindex(m, :regions, ["US", "EU", "Japan", "Russia", "Eurasia", "China", "India", "MidEast", "Africa", "LatAm", "OHI", "OthAsia"])
+RICE = Model()
+set_dimension!(RICE, :time, 2005:10:2595)
+set_dimension!(RICE, :regions, ["US", "EU", "Japan", "Russia", "Eurasia", "China", "India", "MidEast", "Africa", "LatAm", "OHI", "OthAsia"])
 
-    addcomponent(m, grosseconomy, :grosseconomy)
-    addcomponent(m, emissions, :emissions)
-    addcomponent(m, co2cycle, :co2cycle)
-    addcomponent(m, radiativeforcing, :radiativeforcing)
-    addcomponent(m, climatedynamics, :climatedynamics)
-    addcomponent(m, sealevelrise, :sealevelrise)
-    addcomponent(m, sealeveldamages, :sealeveldamages)
-    addcomponent(m, damages, :damages)
-    addcomponent(m, neteconomy, :neteconomy)
-    addcomponent(m, welfare, :welfare)
+addcomponent(RICE, grosseconomy, :grosseconomy)
+addcomponent(RICE, emissions, :emissions)
+addcomponent(RICE, co2cycle, :co2cycle)
+addcomponent(RICE, radiativeforcing, :radiativeforcing)
+addcomponent(RICE, climatedynamics, :climatedynamics)
+addcomponent(RICE, sealevelrise, :sealevelrise)
+addcomponent(RICE, sealeveldamages, :sealeveldamages)
+addcomponent(RICE, damages, :damages)
+addcomponent(RICE, neteconomy, :neteconomy)
+addcomponent(RICE, welfare, :welfare)
 
-    # GROSS ECONOMY COMPONENT
-    setparameter(m, :grosseconomy, :al, al )
-    setparameter(m, :grosseconomy, :l, l)
-    setparameter(m, :grosseconomy, :gama, gama)
-    setparameter(m, :grosseconomy, :dk, dk)
-    setparameter(m, :grosseconomy, :k0,  k0)
+# GROSS ECONOMY COMPONENT
+set_parameter!(RICE, :grosseconomy, :al, p[:al])
+set_parameter!(RICE, :grosseconomy, :l, p[:l])
+set_parameter!(RICE, :grosseconomy, :gama, p[:gama])
+set_parameter!(RICE, :grosseconomy, :dk, p[:dk])
+set_parameter!(RICE, :grosseconomy, :k0, p[:k0])
 
-    connectparameter(m, :grosseconomy, :I, :neteconomy, :I)
+# Note: offset=1 => dependence is on on prior timestep, i.e., not a cycle
+connect_parameter(RICE, :grosseconomy, :I, :neteconomy, :I, offset = 1)
 
-    # EMISSIONS COMPONENT
-    setparameter(m, :emissions, :sigma, sigma)
-    setparameter(m, :emissions, :MIU, MIU)
-    setparameter(m, :emissions, :etree, etree)
-    setparameter(m, :emissions, :cost1, cost1 )
-    setparameter(m, :emissions, :MIU, MIU)
-    setparameter(m, :emissions, :expcost2, expcost2)
-    setparameter(m, :emissions, :partfract, partfract)
-    setparameter(m, :emissions, :pbacktime, pbacktime)
+# EMISSIONS COMPONENT
+set_parameter!(RICE, :emissions, :sigma, p[:sigma])
+set_parameter!(RICE, :emissions, :MIU, p[:MIU])
+set_parameter!(RICE, :emissions, :etree, p[:etree])
+set_parameter!(RICE, :emissions, :cost1, p[:cost1])
+set_parameter!(RICE, :emissions, :MIU, p[:MIU])
+set_parameter!(RICE, :emissions, :expcost2, p[:expcost2])
+set_parameter!(RICE, :emissions, :partfract, p[:partfract])
+set_parameter!(RICE, :emissions, :pbacktime, p[:pbacktime])
 
-    connectparameter(m, :emissions, :YGROSS, :grosseconomy, :YGROSS)
+connect_parameter(RICE, :emissions, :YGROSS, :grosseconomy, :YGROSS, offset = 0)
 
-    # CO2 CYCLE COMPONENT
-    setparameter(m, :co2cycle, :mat0, mat0)
-    setparameter(m, :co2cycle, :mat1, mat1)
-    setparameter(m, :co2cycle, :mu0, mu0)
-    setparameter(m, :co2cycle, :ml0, ml0)
-    setparameter(m, :co2cycle, :b12, b12)
-    setparameter(m, :co2cycle, :b23, b23)
-    setparameter(m, :co2cycle, :b11, b11)
-    setparameter(m, :co2cycle, :b21, b21)
-    setparameter(m, :co2cycle, :b22, b22)
-    setparameter(m, :co2cycle, :b32, b32)
-    setparameter(m, :co2cycle, :b33, b33)
+# CO2 CYCLE COMPONENT
+set_parameter!(RICE, :co2cycle, :mat0, p[:mat0])
+set_parameter!(RICE, :co2cycle, :mat1, p[:mat1])
+set_parameter!(RICE, :co2cycle, :mu0, p[:mu0])
+set_parameter!(RICE, :co2cycle, :ml0, p[:ml0])
+set_parameter!(RICE, :co2cycle, :b12, p[:b12])
+set_parameter!(RICE, :co2cycle, :b23, p[:b23])
+set_parameter!(RICE, :co2cycle, :b11, p[:b11])
+set_parameter!(RICE, :co2cycle, :b21, p[:b21])
+set_parameter!(RICE, :co2cycle, :b22, p[:b22])
+set_parameter!(RICE, :co2cycle, :b32, p[:b32])
+set_parameter!(RICE, :co2cycle, :b33, p[:b33])
 
-    connectparameter(m, :co2cycle, :E, :emissions, :E)
+connect_parameter(RICE, :co2cycle, :E, :emissions, :E, offset = 0)
 
-    # RADIATIVE FORCING COMPONENT
-    setparameter(m, :radiativeforcing, :forcoth, forcoth)
-    setparameter(m, :radiativeforcing, :fco22x, fco22x)
-    setparameter(m, :radiativeforcing, :mat1, mat1)
+# RADIATIVE FORCING COMPONENT
+set_parameter!(RICE, :radiativeforcing, :forcoth, p[:forcoth])
+set_parameter!(RICE, :radiativeforcing, :fco22x, p[:fco22x])
+set_parameter!(RICE, :radiativeforcing, :mat1, p[:mat1])
 
-    connectparameter(m, :radiativeforcing, :MAT, :co2cycle, :MAT)
-    connectparameter(m, :radiativeforcing, :MATSUM, :co2cycle, :MATSUM)
+connect_parameter(RICE, :radiativeforcing, :MAT, :co2cycle, :MAT, offset = 0)
+connect_parameter(RICE, :radiativeforcing, :MATSUM, :co2cycle, :MATSUM, offset = 0)
 
-    # CLIMATE DYNAMICS COMPONENT
-    setparameter(m, :climatedynamics, :fco22x, fco22x )
-    setparameter(m, :climatedynamics, :t2xco2, t2xco2 )
-    setparameter(m, :climatedynamics, :tatm0,  tatm0)
-    setparameter(m, :climatedynamics, :tatm1,  tatm1)
-    setparameter(m, :climatedynamics, :tocean0,  tocean0)
-    setparameter(m, :climatedynamics, :c1, c1)
-    setparameter(m, :climatedynamics, :c3, c3)
-    setparameter(m, :climatedynamics, :c4,  c4)
+# CLIMATE DYNAMICS COMPONENT
+set_parameter!(RICE, :climatedynamics, :fco22x, p[:fco22x])
+set_parameter!(RICE, :climatedynamics, :t2xco2, p[:t2xco2])
+set_parameter!(RICE, :climatedynamics, :tatm0, p[:tatm0])
+set_parameter!(RICE, :climatedynamics, :tatm1, p[:tatm1])
+set_parameter!(RICE, :climatedynamics, :tocean0, p[:tocean0])
+set_parameter!(RICE, :climatedynamics, :c1, p[:c1])
+set_parameter!(RICE, :climatedynamics, :c3, p[:c3])
+set_parameter!(RICE, :climatedynamics, :c4, p[:c4])
 
-    connectparameter(m, :climatedynamics, :FORC, :radiativeforcing, :FORC)
+connect_parameter(RICE, :climatedynamics, :FORC, :radiativeforcing, :FORC, offset = 0)
 
-    # SEA LEVEL RISE COMPONENT
-    setparameter(m, :sealevelrise, :thermeq, thermeq)
-    setparameter(m, :sealevelrise, :therm0, therm0)
-    setparameter(m, :sealevelrise, :thermadj, thermadj)
-    setparameter(m, :sealevelrise, :gsictotal, gsictotal)
-    setparameter(m, :sealevelrise, :gsicmelt, gsicmelt)
-    setparameter(m, :sealevelrise, :gsicexp, gsicexp)
-    setparameter(m, :sealevelrise, :gis0, gis0)
-    setparameter(m, :sealevelrise, :gismelt0, gismelt0)
-    setparameter(m, :sealevelrise, :gismeltabove, gismeltabove)
-    setparameter(m, :sealevelrise, :gismineq, gismineq)
-    setparameter(m, :sealevelrise, :gisexp, gisexp)
-    setparameter(m, :sealevelrise, :aismelt0, aismelt0)
-    setparameter(m, :sealevelrise, :aismeltlow, aismeltlow)
-    setparameter(m, :sealevelrise, :aismeltup, aismeltup)
-    setparameter(m, :sealevelrise, :aisratio, aisratio)
-    setparameter(m, :sealevelrise, :aisinflection, aisinflection)
-    setparameter(m, :sealevelrise, :aisintercept, aisintercept)
-    setparameter(m, :sealevelrise, :aiswais, aiswais)
-    setparameter(m, :sealevelrise, :aisother, aisother)
+# SEA LEVEL RISE COMPONENT
+set_parameter!(RICE, :sealevelrise, :thermeq, p[:thermeq])
+set_parameter!(RICE, :sealevelrise, :therm0, p[:therm0])
+set_parameter!(RICE, :sealevelrise, :thermadj, p[:thermadj])
+set_parameter!(RICE, :sealevelrise, :gsictotal, p[:gsictotal])
+set_parameter!(RICE, :sealevelrise, :gsicmelt, p[:gsicmelt])
+set_parameter!(RICE, :sealevelrise, :gsicexp, p[:gsicexp])
+set_parameter!(RICE, :sealevelrise, :gis0, p[:gis0])
+set_parameter!(RICE, :sealevelrise, :gismelt0, p[:gismelt0])
+set_parameter!(RICE, :sealevelrise, :gismeltabove, p[:gismeltabove])
+set_parameter!(RICE, :sealevelrise, :gismineq, p[:gismineq])
+set_parameter!(RICE, :sealevelrise, :gisexp, p[:gisexp])
+set_parameter!(RICE, :sealevelrise, :aismelt0, p[:aismelt0])
+set_parameter!(RICE, :sealevelrise, :aismeltlow, p[:aismeltlow])
+set_parameter!(RICE, :sealevelrise, :aismeltup, p[:aismeltup])
+set_parameter!(RICE, :sealevelrise, :aisratio, p[:aisratio])
+set_parameter!(RICE, :sealevelrise, :aisinflection, p[:aisinflection])
+set_parameter!(RICE, :sealevelrise, :aisintercept, p[:aisintercept])
+set_parameter!(RICE, :sealevelrise, :aiswais, p[:aiswais])
+set_parameter!(RICE, :sealevelrise, :aisother, p[:aisother])
 
-    connectparameter(m, :sealevelrise, :TATM, :climatedynamics, :TATM)
+connect_parameter(RICE, :sealevelrise, :TATM, :climatedynamics, :TATM, offset = 0)
 
-    setparameter(m, :sealeveldamages, :slrmultiplier, slrmultiplier)
-    setparameter(m, :sealeveldamages, :slrelasticity, slrelasticity)
-    setparameter(m, :sealeveldamages, :slrdamlinear, slrdamlinear)
-    setparameter(m, :sealeveldamages, :slrdamquadratic, slrdamquadratic)
+set_parameter!(RICE, :sealeveldamages, :slrmultiplier, p[:slrmultiplier])
+set_parameter!(RICE, :sealeveldamages, :slrelasticity, p[:slrelasticity])
+set_parameter!(RICE, :sealeveldamages, :slrdamlinear, p[:slrdamlinear])
+set_parameter!(RICE, :sealeveldamages, :slrdamquadratic, p[:slrdamquadratic])
 
-    connectparameter(m, :sealeveldamages, :TOTALSLR, :sealevelrise, :TOTALSLR)
-    connectparameter(m, :sealeveldamages, :YGROSS, :grosseconomy, :YGROSS)
+connect_parameter(RICE, :sealeveldamages, :TOTALSLR, :sealevelrise, :TOTALSLR, offset = 0)
+connect_parameter(RICE, :sealeveldamages, :YGROSS, :grosseconomy, :YGROSS, offset = 0)
 
-    # DAMAGES COMPONENT
-    setparameter(m, :damages, :a1, a1)
-    setparameter(m, :damages, :a2, a2)
-    setparameter(m, :damages, :a3, a3)
+# DAMAGES COMPONENT
+set_parameter!(RICE, :damages, :a1, p[:a1])
+set_parameter!(RICE, :damages, :a2, p[:a2])
+set_parameter!(RICE, :damages, :a3, p[:a3])
 
-    connectparameter(m, :damages, :TATM, :climatedynamics, :TATM)
-    connectparameter(m, :damages, :YGROSS, :grosseconomy, :YGROSS)
-    connectparameter(m, :damages, :SLRDAMAGES, :sealeveldamages, :SLRDAMAGES)
+connect_parameter(RICE, :damages, :TATM, :climatedynamics, :TATM, offset = 0)
+connect_parameter(RICE, :damages, :YGROSS, :grosseconomy, :YGROSS, offset = 0)
+connect_parameter(RICE, :damages, :SLRDAMAGES, :sealeveldamages, :SLRDAMAGES, offset = 0)
 
-    # NET ECONOMY COMPONENT
-    setparameter(m, :neteconomy, :S, savings)
-    setparameter(m, :neteconomy, :l, l)
+# NET ECONOMY COMPONENT
+set_parameter!(RICE, :neteconomy, :S, p[:savings])
+set_parameter!(RICE, :neteconomy, :l, p[:l])
 
-    connectparameter(m, :neteconomy, :YGROSS, :grosseconomy, :YGROSS)
-    connectparameter(m, :neteconomy, :DAMFRAC, :damages, :DAMFRAC)
-    connectparameter(m, :neteconomy, :DAMAGES, :damages, :DAMAGES)
-    connectparameter(m, :neteconomy, :ABATECOST, :emissions, :ABATECOST)
+connect_parameter(RICE, :neteconomy, :YGROSS, :grosseconomy, :YGROSS, offset = 0)
+connect_parameter(RICE, :neteconomy, :DAMFRAC, :damages, :DAMFRAC, offset = 0)
+connect_parameter(RICE, :neteconomy, :DAMAGES, :damages, :DAMAGES, offset = 0)
+connect_parameter(RICE, :neteconomy, :ABATECOST, :emissions, :ABATECOST, offset = 0)
 
-    # WELFARE COMPONENT
-    setparameter(m, :welfare, :l, l )
-    setparameter(m, :welfare, :elasmu, elasmu )
-    setparameter(m, :welfare, :rr, rr)
-    setparameter(m, :welfare, :scale1, scale1 )
-    setparameter(m, :welfare, :scale2, scale2)
-    setparameter(m, :welfare, :alpha, alpha)
+# WELFARE COMPONENT
+set_parameter!(RICE, :welfare, :l, p[:l])
+set_parameter!(RICE, :welfare, :elasmu, p[:elasmu])
+set_parameter!(RICE, :welfare, :rr, p[:rr])
+set_parameter!(RICE, :welfare, :scale1, p[:scale1])
+set_parameter!(RICE, :welfare, :scale2, p[:scale2])
+set_parameter!(RICE, :welfare, :alpha, p[:alpha])
 
-    connectparameter(m, :welfare, :CPC, :neteconomy, :CPC)
+connect_parameter(RICE, :welfare, :CPC, :neteconomy, :CPC, offset = 0)
 
-    return m
-end
+add_connector_comps(RICE)
 
-function getrice(;datafile=joinpath(dirname(@__FILE__), "..", "data", "RICE_2010_base_000.xlsm"))
-    params = getrice2010parameters(datafile)
-
-    m = constructrice(params)
-
-    return m
-end
+end #module
