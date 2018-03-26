@@ -15,7 +15,7 @@ include("components/slr_component.jl")
 include("components/slrdamages_component.jl")
 include("components/welfare_component.jl")
 
-export getparam_single, getparam_timeseries, RICE
+export RICE
 
 const global datafile = joinpath(dirname(@__FILE__), "..", "data", "RICE_2010_base_000.xlsm")
 
