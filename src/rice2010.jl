@@ -15,7 +15,7 @@ include("components/slr_component.jl")
 include("components/slrdamages_component.jl")
 include("components/welfare_component.jl")
 
-export getindexfromyear_rice_2010, getparam_single, getparam_timeseries, RICE
+export RICE
 
 #
 # N.B. See rice2010-defmodel.jl for the @defmodel version of the following

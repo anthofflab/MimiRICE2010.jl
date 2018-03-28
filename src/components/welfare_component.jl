@@ -17,13 +17,6 @@ using Mimi
     scale2 = Parameter(index=[regions]) # Additive scaling coefficient
     alpha = Parameter(index=[time, regions])
 
-    function init(p, v, d)
-        t = 1
-        for r in d.regions
-            v.REGCUMCEMUTOTPER[t,r] = v.CEMUTOTPER[t,r]            
-        end
-    end
-
     function run_timestep(p, v, d, t)
 
         #Define function for PERIODU #NEED TO ADD IF STATEMENT LIKE IN JUMP MODEL OR IS THAT ONLY ISSUES WHEN ELASMU = 1.0?
@@ -37,7 +30,7 @@ using Mimi
 
         #Define function for CEMUTOTPER
         for r in d.regions
-            if t != 60
+        if t != 60
                 v.CEMUTOTPER[t,r] = v.PERIODU[t,r] * p.l[t,r] * p.rr[t,r]
             else
                 v.CEMUTOTPER[t,r] = v.PERIODU[t,r] * p.l[t,r] * p.rr[t,r] / (1. - ((p.rr[t-1,r] / (1. + 0.015)^10) / p.rr[t-1,r]))
@@ -45,8 +38,10 @@ using Mimi
         end
 
         #Define function for REGCUMCEMUTOTPER
-        if t > 1
-            for r in d.regions
+        for r in d.regions
+            if t ==1
+                v.REGCUMCEMUTOTPER[t,r] = v.CEMUTOTPER[t,r]
+            else
                 v.REGCUMCEMUTOTPER[t,r] = v.REGCUMCEMUTOTPER[t-1, r] + v.CEMUTOTPER[t,r]
             end
         end

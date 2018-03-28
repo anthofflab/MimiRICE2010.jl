@@ -19,11 +19,6 @@ using Mimi
     pbacktime = Parameter(index=[time, regions]) # Backstop price
     MIU = Parameter(index=[time, regions]) # Emission control rate GHGs
 
-    function init(p, v, d)
-        t = 1
-        v.CCA[t] = sum(v.EIND[t,:]) * 10.
-    end
-
     function run_timestep(p, v, d, t)
 
         #Define function for EIND
@@ -35,7 +30,9 @@ using Mimi
         v.E[t] = sum(v.EIND[t,:]) + p.etree[t]
 
         #Define function for CCA
-        if t > 1
+        if t==1
+            v.CCA[t] = sum(v.EIND[t,:]) * 10.
+        else
             v.CCA[t] =  v.CCA[t-1] + (sum(v.EIND[t,:]) * 10.)
         end
 
@@ -54,4 +51,5 @@ using Mimi
             v.CPRICE[t,r] = p.pbacktime[t,r] * 1000 * p.MIU[t,r]^(p.expcost2[r] - 1)
         end
     end
+
 end
