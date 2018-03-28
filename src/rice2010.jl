@@ -2,8 +2,8 @@ module rice2010
 
 using Mimi
 
-include("helpers.jl")
 include("parameters.jl")
+
 include("components/climatedynamics_component.jl")
 include("components/co2cycle_component.jl")
 include("components/damages_component.jl")

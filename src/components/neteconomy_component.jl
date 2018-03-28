@@ -16,18 +16,13 @@ using Mimi
     S = Parameter(index=[time, regions]) # Gross savings rate as fraction of gross world product
     l = Parameter(index=[time, regions]) # Level of population and labor
 
-    function init(p, v, d)
-        t = 1
-        for r in d.regions
-            v.YNET[t,r] = p.YGROSS[t,r]/(1+p.DAMFRAC[t,r])            
-        end
-    end
-
     function run_timestep(p, v, d, t)
 
         #Define function for YNET
-        if t > 1
-            for r in d.regions
+        for r in d.regions
+            if t==1
+                v.YNET[t,r] = p.YGROSS[t,r]/(1+p.DAMFRAC[t,r])
+            else
                 v.YNET[t,r] = p.YGROSS[t,r] - p.DAMAGES[t,r]
             end
         end

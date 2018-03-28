@@ -2,8 +2,8 @@ module rice2010
 
 using Mimi
 
-include("helpers.jl")
 include("parameters.jl")
+
 include("components/climatedynamics_component.jl")
 include("components/co2cycle_component.jl")
 include("components/damages_component.jl")
@@ -79,7 +79,7 @@ const global datafile = joinpath(dirname(@__FILE__), "..", "data", "RICE_2010_ba
     radiativeforcing.fco22x     = p[:fco22x]
     radiativeforcing.mat1       = p[:mat1]
 
-    co2cycle.MAT => radiativeforcing.MA
+    co2cycle.MAT => radiativeforcing.MAT
     co2cycle.MATSUM => radiativeforcing.MATSUM
    
     # CLIMATE DYNAMICS COMPONENT
@@ -92,7 +92,7 @@ const global datafile = joinpath(dirname(@__FILE__), "..", "data", "RICE_2010_ba
     climatedynamics.c3      = p[:c3]
     climatedynamics.c4      = p[:c4]
 
-    radiativeforcing.FORC => climatdynamics.FORC
+    radiativeforcing.FORC => climatedynamics.FORC
    
     # SEA LEVEL RISE COMPONENT
     sealevelrise.thermeq        = p[:thermeq]
@@ -123,7 +123,7 @@ const global datafile = joinpath(dirname(@__FILE__), "..", "data", "RICE_2010_ba
     sealeveldamages.slrdamquadratic = p[:slrdamquadratic]
 
     sealevelrise.TOTALSLR => sealeveldamages.TOTALSLR
-    sealevelrise.YGROSS => sealeveldamages.YGROSS
+    grosseconomy.YGROSS => sealeveldamages.YGROSS
 
     # DAMAGES COMPONENT
     damages.a1 = p[:a1]
