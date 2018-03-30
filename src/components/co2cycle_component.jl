@@ -23,30 +23,34 @@ using Mimi
     b32 = Parameter() # Carbon cycle transition matrix
     b33 = Parameter() # Carbon cycle transition matrix
 
-    function init(p, v, d)
-        t = 1
-        v.MAT[t] = p.mat0
-        v.ML[t] = p.ml0
-        v.MU[t] = p.mu0
-        v.MATSUM[t] = 0
-    end
-
     function run_timestep(p, v, d, t)
-        if t > 1
-            #Define function for MAT
-            if t==2
-                v.MAT[t] = p.mat1
-            else
-                v.MAT[t] = v.MAT[t-1] * p.b11 + v.MU[t-1] * p.b21 + (p.E[t-1] * 10)
-            end
+        #Define function for MAT
+        if t==1
+            v.MAT[t] = p.mat0
+        elseif t==2
+            v.MAT[t] = p.mat1
+        else
+            v.MAT[t] = v.MAT[t-1] * p.b11 + v.MU[t-1] * p.b21 + (p.E[t-1] * 10)
+        end
 
-            #Define function for ML
+        #Define function for ML
+        if t==1
+            v.ML[t] = p.ml0
+        else
             v.ML[t] = v.ML[t-1] * p.b33 + v.MU[t-1] * p.b23
+        end
 
-            #Define function for MU
+        #Define function for MU
+        if t==1
+            v.MU[t] = p.mu0
+        else
             v.MU[t] = v.MAT[t-1] * p.b12 + v.MU[t-1] * p.b22 + v.ML[t-1] * p.b32
+        end
 
-            #Define function for MATSUM
+        #Define function for MATSUM
+        if t ==1
+            v.MATSUM[t] = 0
+        else
             v.MATSUM[t] = v.MAT[t] + (v.MAT[t] * p.b11 + v.MU[t] * p.b21 +  (p.E[t] * 10))
         end
     end

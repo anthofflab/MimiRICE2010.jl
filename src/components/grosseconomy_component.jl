@@ -16,18 +16,12 @@ using Mimi
     # TODO remove this, just a temporary output trick
     L = Variable(index=[time, regions])
 
-    function init(p, v, d)
-        t = 1
-        for r in d.regions
-            v.K[t,r] = p.k0[r]
-        end
-    end
-
     function run_timestep(p, v, d, t)
-
         #Define function for K
-        if t > 1
-            for r in d.regions
+        for r in d.regions
+            if t==1
+                v.K[t,r] = p.k0[r]
+            else
                 v.K[t,r] = (1 - p.dk[r])^10 * v.K[t-1,r] + 10 * p.I[t-1,r]
             end
         end
