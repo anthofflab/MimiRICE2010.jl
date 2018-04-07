@@ -30,7 +30,7 @@ using Mimi
 
         #Define function for CEMUTOTPER
         for r in d.regions
-        if t != 60
+            if t != 60
                 v.CEMUTOTPER[t,r] = v.PERIODU[t,r] * p.l[t,r] * p.rr[t,r]
             else
                 v.CEMUTOTPER[t,r] = v.PERIODU[t,r] * p.l[t,r] * p.rr[t,r] / (1. - ((p.rr[t-1,r] / (1. + 0.015)^10) / p.rr[t-1,r]))
