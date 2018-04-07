@@ -4,7 +4,8 @@ using Mimi
 
 include("../src/rice2010.jl")
 
-m = getrice()
+using rice2010
+m = rice2010.RICE
 run(m)
 
 parameter_filename = joinpath(dirname(@__FILE__), "..", "data", "RICE_2010_base_000.xlsm")
