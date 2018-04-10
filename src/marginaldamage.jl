@@ -1,4 +1,5 @@
 include("rice2010.jl")
+using rice2010
 
 function getmarginal_rice_models(;emissionyear=2005,datafile=joinpath(dirname(@__FILE__), "..", "data", "RICE_2010_base_000.xlsm"))
    
