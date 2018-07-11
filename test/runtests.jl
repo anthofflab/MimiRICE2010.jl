@@ -30,6 +30,12 @@ Precision = 1.0e-11
 
 @testset "mimi-rice-2010" begin
 
+#------------------------------------------------------------------------------
+#   1. Run tests on the whole model
+#------------------------------------------------------------------------------
+
+@testset "mimi-rice-2010-model" begin
+
 # TATM Test (temperature increase)
 True_TATM = vec(readxl(f,"Global!B70:BI70"))
 @test maximum(abs, m[:climatedynamics, :TATM] .- True_TATM) ≈ 0. atol=Precision
@@ -76,4 +82,45 @@ True_PERIODUTILITY = Truth("B94:BI94")
 True_UTILITY = readxl(f,"Global!B77:B77")
 @test maximum(abs, m[:welfare, :UTILITY] .- True_UTILITY) ≈ 0. atol=Precision
 
-end
+end #mimi-rice-2010-model testset
+
+#------------------------------------------------------------------------------
+#   2. Run tests to make sure integration version (Mimi v0.5.0)
+#   values match Mimi 0.4.0 values
+#------------------------------------------------------------------------------
+
+@testset "mimi-rice-2010-integration" begin
+
+nullvalue = -999.999
+
+for c in map(name, Mimi.compdefs(m)), v in Mimi.variable_names(m, c)
+    
+    #load data for comparison
+    filepath = "../data/validation_data_v040/$c-$v.csv"        
+    results = m[c, v]
+
+    if typeof(results) <: Number
+        validation_results = DataFrames.readtable(filepath)[1,1]
+        
+    else
+        validation_results = convert(Array, DataFrames.readtable(filepath))
+
+        #match dimensions
+        if size(validation_results,1) == 1
+            validation_results = validation_results'
+        end
+
+        #remove NaNs
+        results[isnan.(results)] = nullvalue
+        validation_results[isnan.(validation_results)] = nullvalue
+        
+    end
+    @test results ≈ validation_results atol = Precision
+    
+end #for loop
+
+end #mimi-rice-2010-integration testset
+
+end #mimi-rice-2010 testset
+
+nothing
