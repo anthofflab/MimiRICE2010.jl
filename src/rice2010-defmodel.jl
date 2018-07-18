@@ -72,7 +72,7 @@ const global datafile = joinpath(dirname(@__FILE__), "..", "data", "RICE_2010_ba
     co2cycle.b32    = p[:b32]
     co2cycle.b33    = p[:b33]
 
-    emissions.E => co2cylce.E
+    emissions.E => co2cycle.E
    
     # RADIATIVE FORCING COMPONENT
     radiativeforcing.forcoth    = p[:forcoth]
@@ -138,7 +138,7 @@ const global datafile = joinpath(dirname(@__FILE__), "..", "data", "RICE_2010_ba
     neteconomy.S    = p[:savings]
     neteconomy.l    = p[:l]
 
-    grosseconomy.YGROSS0    => neteconomy.YGROSS
+    grosseconomy.YGROSS    => neteconomy.YGROSS
     damages.DAMFRAC         => neteconomy.DAMFRAC
     damages.DAMAGES         => neteconomy.DAMAGES
     emissions.ABATECOST     => neteconomy.ABATECOST
