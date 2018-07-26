@@ -18,16 +18,16 @@ using Mimi
 
     function run_timestep(p, v, d, t)
         #Define function for TATM
-        if t==1
+        if is_first(t)
             v.TATM[t] = p.tatm0
-        elseif t==2
+        elseif t.t == 2
             v.TATM[t] = p.tatm1
         else
             v.TATM[t] = v.TATM[t-1] + p.c1 * ((p.FORC[t] - (p.fco22x/p.t2xco2) * v.TATM[t-1]) - (p.c3 * (v.TATM[t-1] - v.TOCEAN[t-1])))
         end
 
         #Define function for TOCEAN
-        if t==1
+        if is_first(t)
             v.TOCEAN[t] = p.tocean0
         else
             v.TOCEAN[t] = v.TOCEAN[t-1] + p.c4 * (v.TATM[t-1] - v.TOCEAN[t-1])

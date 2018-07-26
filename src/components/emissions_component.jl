@@ -30,7 +30,7 @@ using Mimi
         v.E[t] = sum(v.EIND[t,:]) + p.etree[t]
 
         #Define function for CCA
-        if t==1
+        if is_first(t)
             v.CCA[t] = sum(v.EIND[t,:]) * 10.
         else
             v.CCA[t] =  v.CCA[t-1] + (sum(v.EIND[t,:]) * 10.)

@@ -22,7 +22,7 @@ using Mimi
 
         #Define function for DAMAGES
         for r in d.regions
-            if t==1
+            if is_first(t)
                 v.DAMAGES[t,r] = p.YGROSS[t,r] * (1 - 1 / (1+v.DAMFRAC[t,r]))
             else
                 v.DAMAGES[t,r] = (p.YGROSS[t,r] * v.DAMFRAC[t,r]) / (1. + v.DAMFRAC[t,r]^10)

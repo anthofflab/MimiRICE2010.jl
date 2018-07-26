@@ -19,7 +19,7 @@ using Mimi
     function run_timestep(p, v, d, t)
         #Define function for K
         for r in d.regions
-            if t==1
+            if is_first(t)
                 v.K[t,r] = p.k0[r]
             else
                 v.K[t,r] = (1 - p.dk[r])^10 * v.K[t-1,r] + 10 * p.I[t-1,r]

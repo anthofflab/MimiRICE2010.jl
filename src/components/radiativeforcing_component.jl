@@ -11,7 +11,7 @@ using Mimi
 
     function run_timestep(p, v, d, t)
         #Define function for FORC
-        if t==1
+        if is_first(t)
             v.FORC[t] = p.fco22x * ((log10((((p.MAT[t] + p.mat1)/2)+0.000001)/596.4)/log10(2))) + p.forcoth[t]  #TEMP NOTE: Uses mat1 because it's given as a parameter...not calculated so couldn't use MATSUM
         else
             v.FORC[t] = p.fco22x * ((log10((((p.MATSUM[t])/2)+0.000001)/596.4)/log10(2))) + p.forcoth[t]

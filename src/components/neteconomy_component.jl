@@ -20,7 +20,7 @@ using Mimi
 
         #Define function for YNET
         for r in d.regions
-            if t==1
+            if is_first(t)
                 v.YNET[t,r] = p.YGROSS[t,r]/(1+p.DAMFRAC[t,r])
             else
                 v.YNET[t,r] = p.YGROSS[t,r] - p.DAMAGES[t,r]
@@ -39,7 +39,7 @@ using Mimi
 
         #Define function for C
         for r in d.regions
-            if t != 60
+            if t.t != 60
                 v.C[t,r] = v.Y[t,r] - v.I[t,r]
             else
                 v.C[t,r] = v.C[t-1, r]
