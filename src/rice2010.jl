@@ -155,6 +155,4 @@ set_param!(RICE, :welfare, :alpha, p[:alpha])
 
 connect_param!(RICE, :welfare, :CPC, :neteconomy, :CPC, offset = 0)
 
-add_connector_comps(RICE)
-
 end #module
