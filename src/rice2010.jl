@@ -50,7 +50,7 @@ function constructrice(p)
     set_param!(RICE, :emissions, :partfract, p[:partfract])
     set_param!(RICE, :emissions, :pbacktime, p[:pbacktime])
 
-    connect_param!(RICE, :emissions, :YGROSS, :grosseconomy, :YGROSS, offset = 0)
+    connect_param!(RICE, :emissions, :YGROSS, :grosseconomy, :YGROSS)
 
     # CO2 CYCLE COMPONENT
     set_param!(RICE, :co2cycle, :mat0, p[:mat0])
@@ -65,15 +65,15 @@ function constructrice(p)
     set_param!(RICE, :co2cycle, :b32, p[:b32])
     set_param!(RICE, :co2cycle, :b33, p[:b33])
 
-    connect_param!(RICE, :co2cycle, :E, :emissions, :E, offset = 0)
+    connect_param!(RICE, :co2cycle, :E, :emissions, :E)
 
     # RADIATIVE FORCING COMPONENT
     set_param!(RICE, :radiativeforcing, :forcoth, p[:forcoth])
     set_param!(RICE, :radiativeforcing, :fco22x, p[:fco22x])
     set_param!(RICE, :radiativeforcing, :mat1, p[:mat1])
 
-    connect_param!(RICE, :radiativeforcing, :MAT, :co2cycle, :MAT, offset = 0)
-    connect_param!(RICE, :radiativeforcing, :MATSUM, :co2cycle, :MATSUM, offset = 0)
+    connect_param!(RICE, :radiativeforcing, :MAT, :co2cycle, :MAT)
+    connect_param!(RICE, :radiativeforcing, :MATSUM, :co2cycle, :MATSUM)
 
     # CLIMATE DYNAMICS COMPONENT
     set_param!(RICE, :climatedynamics, :fco22x, p[:fco22x])
@@ -85,7 +85,7 @@ function constructrice(p)
     set_param!(RICE, :climatedynamics, :c3, p[:c3])
     set_param!(RICE, :climatedynamics, :c4, p[:c4])
 
-    connect_param!(RICE, :climatedynamics, :FORC, :radiativeforcing, :FORC, offset = 0)
+    connect_param!(RICE, :climatedynamics, :FORC, :radiativeforcing, :FORC)
 
     # SEA LEVEL RISE COMPONENT
     set_param!(RICE, :sealevelrise, :thermeq, p[:thermeq])
@@ -108,33 +108,33 @@ function constructrice(p)
     set_param!(RICE, :sealevelrise, :aiswais, p[:aiswais])
     set_param!(RICE, :sealevelrise, :aisother, p[:aisother])
 
-    connect_param!(RICE, :sealevelrise, :TATM, :climatedynamics, :TATM, offset = 0)
+    connect_param!(RICE, :sealevelrise, :TATM, :climatedynamics, :TATM)
 
     set_param!(RICE, :sealeveldamages, :slrmultiplier, p[:slrmultiplier])
     set_param!(RICE, :sealeveldamages, :slrelasticity, p[:slrelasticity])
     set_param!(RICE, :sealeveldamages, :slrdamlinear, p[:slrdamlinear])
     set_param!(RICE, :sealeveldamages, :slrdamquadratic, p[:slrdamquadratic])
 
-    connect_param!(RICE, :sealeveldamages, :TOTALSLR, :sealevelrise, :TOTALSLR, offset = 0)
-    connect_param!(RICE, :sealeveldamages, :YGROSS, :grosseconomy, :YGROSS, offset = 0)
+    connect_param!(RICE, :sealeveldamages, :TOTALSLR, :sealevelrise, :TOTALSLR)
+    connect_param!(RICE, :sealeveldamages, :YGROSS, :grosseconomy, :YGROSS)
 
     # DAMAGES COMPONENT
     set_param!(RICE, :damages, :a1, p[:a1])
     set_param!(RICE, :damages, :a2, p[:a2])
     set_param!(RICE, :damages, :a3, p[:a3])
 
-    connect_param!(RICE, :damages, :TATM, :climatedynamics, :TATM, offset = 0)
-    connect_param!(RICE, :damages, :YGROSS, :grosseconomy, :YGROSS, offset = 0)
-    connect_param!(RICE, :damages, :SLRDAMAGES, :sealeveldamages, :SLRDAMAGES, offset = 0)
+    connect_param!(RICE, :damages, :TATM, :climatedynamics, :TATM)
+    connect_param!(RICE, :damages, :YGROSS, :grosseconomy, :YGROSS)
+    connect_param!(RICE, :damages, :SLRDAMAGES, :sealeveldamages, :SLRDAMAGES)
 
     # NET ECONOMY COMPONENT
     set_param!(RICE, :neteconomy, :S, p[:savings])
     set_param!(RICE, :neteconomy, :l, p[:l])
 
-    connect_param!(RICE, :neteconomy, :YGROSS, :grosseconomy, :YGROSS, offset = 0)
-    connect_param!(RICE, :neteconomy, :DAMFRAC, :damages, :DAMFRAC, offset = 0)
-    connect_param!(RICE, :neteconomy, :DAMAGES, :damages, :DAMAGES, offset = 0)
-    connect_param!(RICE, :neteconomy, :ABATECOST, :emissions, :ABATECOST, offset = 0)
+    connect_param!(RICE, :neteconomy, :YGROSS, :grosseconomy, :YGROSS)
+    connect_param!(RICE, :neteconomy, :DAMFRAC, :damages, :DAMFRAC)
+    connect_param!(RICE, :neteconomy, :DAMAGES, :damages, :DAMAGES)
+    connect_param!(RICE, :neteconomy, :ABATECOST, :emissions, :ABATECOST)
 
     # WELFARE COMPONENT
     set_param!(RICE, :welfare, :l, p[:l])
@@ -144,9 +144,9 @@ function constructrice(p)
     set_param!(RICE, :welfare, :scale2, p[:scale2])
     set_param!(RICE, :welfare, :alpha, p[:alpha])
 
-    connect_param!(RICE, :welfare, :CPC, :neteconomy, :CPC, offset = 0)
+    connect_param!(RICE, :welfare, :CPC, :neteconomy, :CPC)
 
-    return m
+    return RICE
 end #function 
     
 function getrice(;datafile=joinpath(dirname(@__FILE__), "..", "data", "RICE_2010_base_000.xlsm"))
