@@ -1,3 +1,5 @@
+module Rice2010
+
 using Mimi
 
 include("parameters.jl")
@@ -12,6 +14,8 @@ include("components/radiativeforcing_component.jl")
 include("components/slr_component.jl")
 include("components/slrdamages_component.jl")
 include("components/welfare_component.jl")
+
+export constructrice, getrice, getrice2010parameters
 
 function constructrice(p)
 
@@ -156,3 +160,5 @@ function getrice(;datafile=joinpath(dirname(@__FILE__), "..", "data", "RICE_2010
 
     return m
 end #function
+
+end #module

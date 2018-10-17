@@ -3,6 +3,8 @@ using ExcelReaders
 using Mimi
 
 include("../src/rice2010.jl")
+using Rice2010
+
 m = getrice()
 run(m)
 
