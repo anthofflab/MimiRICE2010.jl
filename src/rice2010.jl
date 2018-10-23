@@ -42,7 +42,7 @@ function constructrice(p)
     set_param!(m, :grosseconomy, :k0, p[:k0])
 
     # Note: offset=1 => dependence is on on prior timestep, i.e., not a cycle
-    connect_param!(m, :grosseconomy, :I, :neteconomy, :I, offset = 1)
+    connect_param!(m, :grosseconomy, :I, :neteconomy, :I)
 
     # EMISSIONS COMPONENT
     set_param!(m, :emissions, :sigma, p[:sigma])
