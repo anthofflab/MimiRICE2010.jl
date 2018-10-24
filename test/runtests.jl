@@ -1,7 +1,8 @@
-using Base.Test
+using Test
 using ExcelReaders
 using Mimi
 using DataFrames
+using CSV
 
 include("../src/rice2010.jl")
 using .Rice2010
@@ -16,7 +17,7 @@ regions = ["US", "EU", "Japan", "Russia", "Eurasia", "China", "India", "MidEast"
 
 #Function to get true values form Rice2010 Excel
 function Truth(range::AbstractString)
-	true_vals=Array{Float64}(60, length(regions))
+	true_vals=Array{Float64}(undef, 60, length(regions))
     for (i,r) = enumerate(regions)
         data=readxl(f,"$(r)!$(range)")
         for n=1:60
@@ -101,10 +102,10 @@ for c in map(name, Mimi.compdefs(m)), v in Mimi.variable_names(m, c)
     results = m[c, v]
 
     if typeof(results) <: Number
-        validation_results = DataFrames.readtable(filepath)[1,1]
+        validation_results = CSV.read(filepath)[1,1]
         
     else
-        validation_results = convert(Array, DataFrames.readtable(filepath))
+        validation_results = convert(Array, CSV.read(filepath))
 
         #match dimensions
         if size(validation_results,1) == 1
@@ -112,8 +113,8 @@ for c in map(name, Mimi.compdefs(m)), v in Mimi.variable_names(m, c)
         end
 
         #remove NaNs
-        results[isnan.(results)] = nullvalue
-        validation_results[isnan.(validation_results)] = nullvalue
+        results[isnan.(results)] .= nullvalue
+        validation_results[isnan.(validation_results)] .= nullvalue
         
     end
     @test results ≈ validation_results atol = Precision
