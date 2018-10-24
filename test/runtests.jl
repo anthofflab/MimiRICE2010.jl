@@ -17,7 +17,7 @@ regions = ["US", "EU", "Japan", "Russia", "Eurasia", "China", "India", "MidEast"
 function Truth(range::AbstractString)
 	true_vals=Array{Float64}(60, length(regions))
     for (i,r) = enumerate(regions)
-        data=readxl(f,"$r\!$range")
+        data=readxl(f,"$(r)!$(range)")
         for n=1:60
 			true_vals[n,i] = data[n]
         end

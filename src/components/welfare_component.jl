@@ -24,7 +24,7 @@ using Mimi
             if p.elasmu[r]==1.
                 v.PERIODU[t,r] = log(p.CPC[t,r]) * p.alpha[t,r]
             else
-                v.PERIODU[t,r] = ((1./(1.-p.elasmu[r])) * (p.CPC[t,r])^(1.-p.elasmu[r]) + 1.) * p.alpha[t,r]
+                v.PERIODU[t,r] = ((1. / (1. - p.elasmu[r])) * (p.CPC[t,r])^(1. - p.elasmu[r]) + 1.) * p.alpha[t,r]
             end
         end
 

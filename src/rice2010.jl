@@ -153,7 +153,7 @@ function constructrice(p)
     return m
 end #function 
     
-function getrice(;datafile=joinpath(dirname(@__FILE__), "..", "data", "RICE_2010_base_000.xlsm"))
+function getrice(;datafile=joinpath(@__DIR__, "..", "data", "RICE_2010_base_000.xlsm"))
     params = getrice2010parameters(datafile)
 
     m = constructrice(params)
