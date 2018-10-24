@@ -16,42 +16,39 @@ using Mimi
     S = Parameter(index=[time, regions]) # Gross savings rate as fraction of gross world product
     l = Parameter(index=[time, regions]) # Level of population and labor
 
-end
+    function run_timestep(p, v, d, t)
 
-function run_timestep(state::neteconomy, t::Int)
-    v, p, d = getvpd(state)
+        #Define function for YNET
+        for r in d.regions
+            if is_first(t)
+                v.YNET[t,r] = p.YGROSS[t,r]/(1+p.DAMFRAC[t,r])
+            else
+                v.YNET[t,r] = p.YGROSS[t,r] - p.DAMAGES[t,r]
+            end
+        end
 
-    #Define function for YNET
-    for r in d.regions
-        if t==1
-            v.YNET[t,r] = p.YGROSS[t,r]/(1+p.DAMFRAC[t,r])
-        else
-            v.YNET[t,r] = p.YGROSS[t,r] - p.DAMAGES[t,r]
+        #Define function for Y
+        for r in d.regions
+            v.Y[t,r] = v.YNET[t,r] - p.ABATECOST[t,r]
+        end
+
+        #Define function for I
+        for r in d.regions
+            v.I[t,r] = p.S[t,r] * v.Y[t,r]
+        end
+
+        #Define function for C
+        for r in d.regions
+            if t.t != 60
+                v.C[t,r] = v.Y[t,r] - v.I[t,r]
+            else
+                v.C[t,r] = v.C[t-1, r]
+            end
+        end
+
+        #Define function for CPC
+        for r in d.regions
+            v.CPC[t,r] = 1000 * v.C[t,r] / p.l[t,r]
         end
     end
-
-    #Define function for Y
-    for r in d.regions
-        v.Y[t,r] = v.YNET[t,r] - p.ABATECOST[t,r]
-    end
-
-    #Define function for I
-    for r in d.regions
-        v.I[t,r] = p.S[t,r] * v.Y[t,r]
-    end
-
-    #Define function for C
-    for r in d.regions
-        if t != 60
-            v.C[t,r] = v.Y[t,r] - v.I[t,r]
-        else
-            v.C[t,r] = v.C[t-1, r]
-        end
-    end
-
-    #Define function for CPC
-    for r in d.regions
-        v.CPC[t,r] = 1000 * v.C[t,r] / p.l[t,r]
-    end
-
 end

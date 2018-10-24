@@ -15,24 +15,22 @@ using Mimi
     c1 = Parameter() # Climate equation coefficient for upper level
     c3 = Parameter() # Transfer coefficient upper to lower stratum
     c4 = Parameter() # Transfer coefficient for lower level
-end
 
-function run_timestep(state::climatedynamics, t::Int)
-    v, p, d = getvpd(state)
+    function run_timestep(p, v, d, t)
+        #Define function for TATM
+        if is_first(t)
+            v.TATM[t] = p.tatm0
+        elseif t.t == 2
+            v.TATM[t] = p.tatm1
+        else
+            v.TATM[t] = v.TATM[t-1] + p.c1 * ((p.FORC[t] - (p.fco22x/p.t2xco2) * v.TATM[t-1]) - (p.c3 * (v.TATM[t-1] - v.TOCEAN[t-1])))
+        end
 
-    #Define function for TATM
-    if t==1
-        v.TATM[t] = p.tatm0
-    elseif t==2
-        v.TATM[t] = p.tatm1
-    else
-        v.TATM[t] = v.TATM[t-1] + p.c1 * ((p.FORC[t] - (p.fco22x/p.t2xco2) * v.TATM[t-1]) - (p.c3 * (v.TATM[t-1] - v.TOCEAN[t-1])))
-    end
-
-    #Define function for TOCEAN
-    if t==1
-        v.TOCEAN[t] = p.tocean0
-    else
-        v.TOCEAN[t] = v.TOCEAN[t-1] + p.c4 * (v.TATM[t-1] - v.TOCEAN[t-1])
+        #Define function for TOCEAN
+        if is_first(t)
+            v.TOCEAN[t] = p.tocean0
+        else
+            v.TOCEAN[t] = v.TOCEAN[t-1] + p.c4 * (v.TATM[t-1] - v.TOCEAN[t-1])
+        end
     end
 end
