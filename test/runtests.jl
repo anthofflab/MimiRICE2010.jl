@@ -107,16 +107,17 @@ for c in map(name, Mimi.compdefs(m)), v in Mimi.variable_names(m, c)
     else
         validation_results = convert(Array, CSV.read(filepath))
 
+        #remove NaNs
+        results[ismissing.(results)] .= nullvalue
+        results[isnan.(results)] .= nullvalue
+        validation_results[isnan.(validation_results)] .= nullvalue
+        
         #match dimensions
         if size(validation_results,1) == 1
             validation_results = validation_results'
         end
-
-        #remove NaNs
-        results[isnan.(results)] .= nullvalue
-        validation_results[isnan.(validation_results)] .= nullvalue
-        
     end
+
     @test results ≈ validation_results atol = Precision
     
 end #for loop
