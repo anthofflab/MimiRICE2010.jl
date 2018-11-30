@@ -1,23 +1,25 @@
-using Base.Test
+using Test
 using ExcelReaders
 using Mimi
+using DataFrames
+using CSV
 
 include("../src/rice2010.jl")
-using Rice2010
+using .Rice2010
 
 m = getrice()
 run(m)
 
-parameter_filename = joinpath(dirname(@__FILE__), "..", "data", "RICE_2010_base_000.xlsm")
+parameter_filename = joinpath(@__DIR__, "..", "data", "RICE_2010_base_000.xlsm")
 
 f=openxl(parameter_filename)
 regions = ["US", "EU", "Japan", "Russia", "Eurasia", "China", "India", "MidEast", "Africa", "LatAm", "OHI", "OthAsia"]
 
 #Function to get true values form Rice2010 Excel
 function Truth(range::AbstractString)
-	true_vals=Array{Float64}(60, length(regions))
+	true_vals=Array{Float64}(undef, 60, length(regions))
     for (i,r) = enumerate(regions)
-        data=readxl(f,"$r\!$range")
+        data=readxl(f,"$(r)!$(range)")
         for n=1:60
 			true_vals[n,i] = data[n]
         end
@@ -100,21 +102,22 @@ for c in map(name, Mimi.compdefs(m)), v in Mimi.variable_names(m, c)
     results = m[c, v]
 
     if typeof(results) <: Number
-        validation_results = DataFrames.readtable(filepath)[1,1]
+        validation_results = CSV.read(filepath)[1,1]
         
     else
-        validation_results = convert(Array, DataFrames.readtable(filepath))
+        validation_results = convert(Array, CSV.read(filepath))
 
+        #remove NaNs
+        results[ismissing.(results)] .= nullvalue
+        results[isnan.(results)] .= nullvalue
+        validation_results[isnan.(validation_results)] .= nullvalue
+        
         #match dimensions
         if size(validation_results,1) == 1
             validation_results = validation_results'
         end
-
-        #remove NaNs
-        results[isnan.(results)] = nullvalue
-        validation_results[isnan.(validation_results)] = nullvalue
-        
     end
+
     @test results ≈ validation_results atol = Precision
     
 end #for loop
