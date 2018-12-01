@@ -108,9 +108,10 @@ for c in map(name, Mimi.compdefs(m)), v in Mimi.variable_names(m, c)
     else
         validation_results = convert(Array, df)
 
-        #remove NaNs
+        #remove NaNs and Missings
         results[ismissing.(results)] .= nullvalue
         results[isnan.(results)] .= nullvalue
+        validation_results[ismissing.(validation_results)] .= nullvalue
         validation_results[isnan.(validation_results)] .= nullvalue
         
         #match dimensions
