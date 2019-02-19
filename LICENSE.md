@@ -1,7 +1,7 @@
 Mimi-RICE-2010.jl is licensed under the MIT license. This includes all
 content in this repository, except the file RICE_2010_base_000.xlsm.
 
-> Copyright (c) 2015-2017: David Anthoff, Frank Errickson and other
+> Copyright (c) 2015-2019: David Anthoff, Frank Errickson, Lisa Rennels and other
 > contributors:
 >
 > https://github.com/anthofflab/mimi-rice-2010.jl/contributors
