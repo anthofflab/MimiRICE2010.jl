@@ -28,7 +28,7 @@ function Truth(range::AbstractString)
 end
 
 # Test Precision
-Precision = 1.0e-11
+Precision = 1.0e-10
 
 @testset "mimi-rice-2010" begin
 
@@ -96,7 +96,7 @@ end #mimi-rice-2010-model testset
 nullvalue = -999.999
 
 for c in map(name, Mimi.compdefs(m)), v in Mimi.variable_names(m, c)
-    
+
     #load data for comparison
     filepath = joinpath(@__DIR__, "..", "data", "validation_data_v040", "$c-$v.csv")
     results = m[c, v]
@@ -104,7 +104,7 @@ for c in map(name, Mimi.compdefs(m)), v in Mimi.variable_names(m, c)
     df = load(filepath) |> DataFrame
     if typeof(results) <: Number
         validation_results = df[1,1]
-        
+
     else
         validation_results = convert(Array, df)
 
@@ -113,7 +113,7 @@ for c in map(name, Mimi.compdefs(m)), v in Mimi.variable_names(m, c)
         results[isnan.(results)] .= nullvalue
         validation_results[ismissing.(validation_results)] .= nullvalue
         validation_results[isnan.(validation_results)] .= nullvalue
-        
+
         #match dimensions
         if size(validation_results,1) == 1
             validation_results = validation_results'
@@ -121,7 +121,7 @@ for c in map(name, Mimi.compdefs(m)), v in Mimi.variable_names(m, c)
     end
 
     @test results ≈ validation_results atol = Precision
-    
+
 end #for loop
 
 end #mimi-rice-2010-integration testset
