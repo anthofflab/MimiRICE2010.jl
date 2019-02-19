@@ -2,7 +2,7 @@ using Test
 using ExcelReaders
 using Mimi
 using DataFrames
-using CSV
+using CSVFiles
 
 include("../src/rice2010.jl")
 using .Rice2010
@@ -101,15 +101,17 @@ for c in map(name, Mimi.compdefs(m)), v in Mimi.variable_names(m, c)
     filepath = joinpath(@__DIR__, "..", "data", "validation_data_v040", "$c-$v.csv")
     results = m[c, v]
 
+    df = load(filepath) |> DataFrame
     if typeof(results) <: Number
-        validation_results = CSV.read(filepath)[1,1]
+        validation_results = df[1,1]
         
     else
-        validation_results = convert(Array, CSV.read(filepath))
+        validation_results = convert(Array, df)
 
-        #remove NaNs
+        #remove NaNs and Missings
         results[ismissing.(results)] .= nullvalue
         results[isnan.(results)] .= nullvalue
+        validation_results[ismissing.(validation_results)] .= nullvalue
         validation_results[isnan.(validation_results)] .= nullvalue
         
         #match dimensions
