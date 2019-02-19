@@ -112,7 +112,7 @@ using Mimi
             if t.t <= 11
             v.AISMELTRATE[t] = ifelse(p.TATM[t] < 3., (p.aismeltlow * p.TATM[t] * p.aisratio + p.aisintercept), (p.aisinflection * p.aismeltlow + p.aismeltup * (p.TATM[t] - 3.) + p.aisintercept))
             else
-            v.AISMELTRATE[t] = ifelse(p.TATM[t] < 3., (p.aismeltlow * p.TATM[t] * p.aisratio + p.aisintercept), (p.aisinflection * p.aismeltlow + p.aismeltup * (p.TATM[t] - 3.) + p.aismelt0))
+            v.AISMELTRATE[t] = ifelse(p.TATM[t] < 3., (p.aismeltlow * p.TATM[t] * p.aisratio + p.aismelt0), (p.aisinflection * p.aismeltlow + p.aismeltup * (p.TATM[t] - 3.) + p.aismelt0))
             end
         
             #Define function for AISCUM
