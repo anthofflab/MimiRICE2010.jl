@@ -15,5 +15,7 @@ branches:
 matrix:
   allow_failures:
   - julia: nightly
+env:
+  - PYTHON=""  
 after_success:
   - julia -e 'using Pkg; cd(Pkg.dir("MimiRICE2010")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
