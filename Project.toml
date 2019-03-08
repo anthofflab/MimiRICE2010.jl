@@ -4,3 +4,11 @@ uuid = "54b9761e-41d9-11e9-3151-3dc5fec6a45b"
 [deps]
 Mimi = "e4e893b0-ee5e-52ea-8111-44b3bdec128c"
 ExcelReaders = "c04bee98-12a5-510c-87df-2a230cb6e075"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+CSVFiles = "5d742f6a-9f54-50ce-8119-2520741973ca"
+
+[targets]
+test = ["Test", "DataFrames", "CSVFiles"]

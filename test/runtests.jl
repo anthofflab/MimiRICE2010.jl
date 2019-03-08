@@ -1,11 +1,9 @@
 using Test
+using MimiRICE2010
 using ExcelReaders
 using Mimi
 using DataFrames
 using CSVFiles
-
-include("../src/rice2010.jl")
-using .Rice2010
 
 m = getrice()
 run(m)
