@@ -1,4 +1,4 @@
-module Rice2010
+module MimiRICE2010
 
 using Mimi
 
