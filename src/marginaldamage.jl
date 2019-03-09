@@ -1,5 +1,5 @@
-include("rice2010.jl")
-using .Rice2010
+include("MimiRICE2010.jl")
+using .MimiRICE2010
 
 function getmarginal_rice_models(;emissionyear=2005,datafile=joinpath(@__DIR__, "..", "data", "RICE_2010_base_000.xlsm"))
    

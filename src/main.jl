@@ -1,7 +1,7 @@
 using Mimi
 
-include("rice2010.jl")
-using .Rice2010
+include("MimiRICE2010.jl")
+using .MimiRICE2010
 
 m = getrice()
 run(m)
