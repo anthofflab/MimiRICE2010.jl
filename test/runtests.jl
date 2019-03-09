@@ -28,7 +28,7 @@ end
 # Test Precision
 Precision = 1.0e-10
 
-@testset "mimi-rice-2010" begin
+@testset "MimiRICE2010" begin
 
 #------------------------------------------------------------------------------
 #   1. Run tests on the whole model
@@ -125,5 +125,3 @@ end #for loop
 end #mimi-rice-2010-integration testset
 
 end #mimi-rice-2010 testset
-
-nothing
