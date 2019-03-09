@@ -23,17 +23,32 @@ You need to install a number of packages to run the model. You can use the
 following julia code to do so:
 
 ````julia
+using Pkg
 Pkg.add("Mimi")
 Pkg.add("ExcelReaders")
 ````
+
+You will also need to add the Mimi registry and this package.
+```
+registry add https://github.com/mimiframework/MimiRegistry.git
+Pkg.add("MimiRICE2010")
+```
 
 ## Running the model
 
 The model uses the [Mimi framework](https://github.com/mimiframework/Mimi.jl)
 and it is highly recommended to read the Mimi documentation first to
-understand the code structure. To just run the model once, you can run
-the code in the file ``src/main.jl``.
+understand the code structure. For starter code on running the model just once,
+see the code in the file ``examples/main.jl``.
 
+The current exported functions include:
+```
+constructrice
+getrice
+getrice2010parameters
+getmarginal_rice_models
+getmarginaldamages_rice
+```
 ## Known issues
 
 * Atmospheric CO2 concentrations in the years 2005 and 2015 are fixed in
