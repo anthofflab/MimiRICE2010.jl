@@ -2,6 +2,7 @@ module MimiRICE2010
 
 using Mimi
 
+include("marginaldamage.jl")
 include("parameters.jl")
 
 include("components/climatedynamics_component.jl")
@@ -15,7 +16,7 @@ include("components/slr_component.jl")
 include("components/slrdamages_component.jl")
 include("components/welfare_component.jl")
 
-export constructrice, getrice, getrice2010parameters
+export constructrice, getrice, getrice2010parameters, getmarginal_rice_models
 
 function constructrice(p)
 
