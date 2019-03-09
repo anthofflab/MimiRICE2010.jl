@@ -47,6 +47,7 @@ constructrice
 getrice
 getrice2010parameters
 getmarginal_rice_models
+getmarginaldamages_rice
 ```
 ## Known issues
 

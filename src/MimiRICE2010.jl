@@ -16,7 +16,7 @@ include("components/slr_component.jl")
 include("components/slrdamages_component.jl")
 include("components/welfare_component.jl")
 
-export constructrice, getrice, getrice2010parameters, getmarginal_rice_models
+export constructrice, getrice, getrice2010parameters, getmarginal_rice_models, getmarginaldamages_rice
 
 function constructrice(p)
 
