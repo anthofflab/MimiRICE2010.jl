@@ -1,5 +1,3 @@
-using Mimi
-
 @defcomp sealeveldamages begin
     regions = Index()
 

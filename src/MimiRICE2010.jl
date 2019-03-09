@@ -1,7 +1,8 @@
 module MimiRICE2010
 
-using Mimi
+using Mimi, ExcelReaders
 
+include("helpers.jl")
 include("marginaldamage.jl")
 include("parameters.jl")
 
@@ -152,8 +153,8 @@ function constructrice(p)
     connect_param!(m, :welfare, :CPC, :neteconomy, :CPC)
 
     return m
-end #function 
-    
+end #function
+
 function getrice(;datafile=joinpath(@__DIR__, "..", "data", "RICE_2010_base_000.xlsm"))
     params = getrice2010parameters(datafile)
 
