@@ -1,6 +1,3 @@
-using ExcelReaders
-include("helpers.jl")
-
 function getrice2010parameters(filename)
     p = Dict{Symbol,Any}()
 

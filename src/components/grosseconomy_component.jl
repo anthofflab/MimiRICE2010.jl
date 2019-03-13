@@ -1,5 +1,3 @@
-using Mimi
-
 @defcomp grosseconomy begin
     regions = Index()
 

@@ -1,5 +1,3 @@
-using Mimi
-
 @defcomp neteconomy begin
     regions = Index()
 

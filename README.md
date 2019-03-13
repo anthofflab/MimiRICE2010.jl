@@ -19,19 +19,30 @@ this model.
 
 ## Preparing the software environment
 
-You need to install a number of packages to run the model. You can use the
-following julia code to do so:
+You first need to connect your julia installation with the central
+[Mimi registry](https://github.com/mimiframework/MimiRegistry) of Mimi models.
+This central registry is like a catalogue of models that use Mimi that is
+maintained by the Mimi project. To add this registry, run the following
+command at the julia package REPL:
 
-````julia
-using Pkg
-Pkg.add("Mimi")
-Pkg.add("ExcelReaders")
-````
-
-You will also need to add the Mimi registry and this package.
+```julia
+pkg> registry add https://github.com/mimiframework/MimiRegistry.git
 ```
-registry add https://github.com/mimiframework/MimiRegistry.git
-Pkg.add("MimiRICE2010")
+
+You only need to run this command once on a computer.
+
+The next step is to install MimiRICE2010.jl itself. You need to run the
+following command at the julia package REPL:
+
+```julia
+pkg> add MimiRICE2010
+```
+
+You probably also want to install the Mimi package into your julia environment,
+so that you can use some of the tools in there:
+
+```julia
+pkg> add Mimi
 ```
 
 ## Running the model
@@ -39,16 +50,8 @@ Pkg.add("MimiRICE2010")
 The model uses the [Mimi framework](https://github.com/mimiframework/Mimi.jl)
 and it is highly recommended to read the Mimi documentation first to
 understand the code structure. For starter code on running the model just once,
-see the code in the file ``examples/main.jl``.
+see the code in the file `examples/main.jl`.
 
-The current exported functions include:
-```
-constructrice
-getrice
-getrice2010parameters
-getmarginal_rice_models
-getmarginaldamages_rice
-```
 ## Known issues
 
 * Atmospheric CO2 concentrations in the years 2005 and 2015 are fixed in
