@@ -93,7 +93,7 @@ end #mimi-rice-2010-model testset
 
 nullvalue = -999.999
 
-for c in map(name, Mimi.compdefs(m)), v in Mimi.variable_names(m, c)
+for c in map(nameof, Mimi.compdefs(m)), v in Mimi.variable_names(m, c)
 
     #load data for comparison
     filepath = joinpath(@__DIR__, "..", "data", "validation_data_v040", "$c-$v.csv")
