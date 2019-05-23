@@ -7,9 +7,9 @@ function getmarginal_rice_models(;emissionyear=2005,datafile=joinpath(@__DIR__, 
     m1 = mm.base
     m2 = mm.marginal
 
-    add_comp!(m2, adder, :marginalemission, before=:co2cycle)
+    add_comp!(m2, Mimi.adder, :marginalemission, before=:co2cycle)
 
-    time = dimension(m1, :time)
+    time = Mimi.dimension(m1, :time)
     addem = zeros(length(time))
     addem[time[emissionyear]] = 1.0
 
