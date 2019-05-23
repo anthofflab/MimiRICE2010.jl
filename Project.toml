@@ -4,11 +4,11 @@ version = "2.0.2-DEV"
 
 [deps]
 Mimi = "e4e893b0-ee5e-52ea-8111-44b3bdec128c"
-ExcelReaders = "c04bee98-12a5-510c-87df-2a230cb6e075"
+XLSX = "fdbf4ff8-1666-58a4-91e7-1b58723a45e0"
 
 [compat]
 Mimi = "0.9"
-ExcelReaders = "0.11"
+XLSX = "0.5.2"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"

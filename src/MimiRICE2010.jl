@@ -1,6 +1,7 @@
 module MimiRICE2010
 
-using Mimi, ExcelReaders
+using Mimi
+using XLSX: readxlsx
 
 include("helpers.jl")
 include("marginaldamage.jl")

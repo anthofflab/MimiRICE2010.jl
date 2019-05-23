@@ -12,7 +12,7 @@ end
 function getparam_single(f, range::AbstractString, regions)
     vals= Array{Float64}(undef, length(regions))
     for (i,r) = enumerate(regions)
-        data=readxl(f,"$(r)!$(range)")
+        data=f[r][range]
         vals[i]=data[1]
     end
     return vals
@@ -22,7 +22,7 @@ end
 function getparam_timeseries(f, range::AbstractString, regions, T)
     vals= Array{Float64}(undef, T, length(regions))
     for (i,r) = enumerate(regions)
-        data=readxl(f,"$(r)!$(range)")
+        data=f[r][range]
         for n=1:T
             vals[n,i] = data[n]
         end

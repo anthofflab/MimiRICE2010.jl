@@ -1,6 +1,6 @@
 using Test
 using MimiRICE2010
-using ExcelReaders
+using XLSX: readxlsx
 using Mimi
 using DataFrames
 using CSVFiles
@@ -10,14 +10,14 @@ run(m)
 
 parameter_filename = joinpath(@__DIR__, "..", "data", "RICE_2010_base_000.xlsm")
 
-f=openxl(parameter_filename)
+f=readxlsx(parameter_filename)
 regions = ["US", "EU", "Japan", "Russia", "Eurasia", "China", "India", "MidEast", "Africa", "LatAm", "OHI", "OthAsia"]
 
 #Function to get true values form Rice2010 Excel
 function Truth(range::AbstractString)
 	true_vals=Array{Float64}(undef, 60, length(regions))
     for (i,r) = enumerate(regions)
-        data=readxl(f,"$(r)!$(range)")
+        data=f[r][range]
         for n=1:60
 			true_vals[n,i] = data[n]
         end
@@ -37,11 +37,11 @@ Precision = 1.0e-10
 @testset "mimi-rice-2010-model" begin
 
 # TATM Test (temperature increase)
-True_TATM = vec(readxl(f,"Global!B70:BI70"))
+True_TATM = vec(f["Global"]["B70:BI70"])
 @test maximum(abs, m[:climatedynamics, :TATM] .- True_TATM) ≈ 0. atol=Precision
 
 # MAT Test (carbon concentration atmosphere)
-True_MAT = vec(readxl(f,"Global!B59:BI59"))
+True_MAT = vec(f["Global"]["B59:BI59"])
 @test maximum(abs, m[:co2cycle, :MAT] .- True_MAT) ≈ 0. atol=Precision
 
 # DAMFRAC Test (damages fraction)
@@ -53,7 +53,7 @@ True_DAMAGES = Truth("B64:BI64")
 @test maximum(abs, m[:damages, :DAMAGES] .- True_DAMAGES) ≈ 0. atol=Precision
 
 # E Test (emissions)
-True_E = vec(readxl(f,"Global!B55:BI55"))
+True_E = vec(f["Global"]["B55:BI55"])
 @test maximum(abs, m[:emissions, :E] .- True_E) ≈ 0. atol=Precision
 
 # YGROSS Test (gross output)
@@ -65,11 +65,11 @@ True_CPC = Truth("B88:BI88")
 @test maximum(abs, m[:neteconomy, :CPC] .- True_CPC) ≈ 0. atol=Precision
 
 # FORC Test (radiative forcing)
-True_FORC = vec(readxl(f,"Global!B71:BI71"))
+True_FORC = vec(f["Global"]["B71:BI71"])
 @test maximum(abs, m[:radiativeforcing, :FORC] .- True_FORC) ≈ 0. atol=Precision
 
 # TOTALSLR Test (total sea level rise)
-True_TOTALSLR = vec(readxl(f,"SLR!B62:BI62"))
+True_TOTALSLR = vec(f["SLR"]["B62:BI62"])
 @test maximum(abs, m[:sealevelrise, :TOTALSLR] .- True_TOTALSLR) ≈ 0. atol=Precision
 
 # SLRDAMAGES Test (damages from sea level rise)
@@ -79,7 +79,7 @@ True_SLRDAMAGES = Truth("B50:BI50")
 True_PERIODUTILITY = Truth("B94:BI94")
 @test maximum(abs, m[:welfare, :CEMUTOTPER] .- True_PERIODUTILITY) ≈ 0. atol=Precision
 
-True_UTILITY = readxl(f,"Global!B77:B77")
+True_UTILITY = f["Global"]["B77:B77"]
 @test maximum(abs, m[:welfare, :UTILITY] .- True_UTILITY) ≈ 0. atol=Precision
 
 end #mimi-rice-2010-model testset
