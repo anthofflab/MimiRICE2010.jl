@@ -5,7 +5,7 @@ using Mimi
 using DataFrames
 using CSVFiles
 
-m = getrice()
+m = MimiRICE2010.get_model()
 run(m)
 
 parameter_filename = joinpath(@__DIR__, "..", "data", "RICE_2010_base_000.xlsm")
