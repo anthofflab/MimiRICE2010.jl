@@ -19,10 +19,12 @@ include("components/welfare_component.jl")
 
 export constructrice, getrice
 
+const model_years = 2005:10:2595
+
 function constructrice(p)
 
     m = Model()
-    set_dimension!(m, :time, 2005:10:2595)
+    set_dimension!(m, :time, model_years)
     set_dimension!(m, :regions, ["US", "EU", "Japan", "Russia", "Eurasia", "China", "India", "MidEast", "Africa", "LatAm", "OHI", "OthAsia"])
 
     add_comp!(m, grosseconomy, :grosseconomy)
@@ -155,12 +157,14 @@ function constructrice(p)
     return m
 end #function
 
-function getrice(;datafile=joinpath(@__DIR__, "..", "data", "RICE_2010_base_000.xlsm"))
+function get_model(;datafile=joinpath(@__DIR__, "..", "data", "RICE_2010_base_000.xlsm"))
     params = getrice2010parameters(datafile)
 
     m = constructrice(params)
 
     return m
 end #function
+
+getrice = get_model     # Maintain the old `getrice` function name in addition to the standard MimiRICE2010.get_model
 
 end #module
