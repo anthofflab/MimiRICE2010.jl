@@ -124,4 +124,40 @@ end #for loop
 
 end #mimi-rice-2010-integration testset
 
+@testset "Standard API functions" begin 
+
+m = MimiRICE2010.get_model()
+run(m)
+
+# Test the errors
+@test_throws ErrorException MimiRICE2010.compute_scc()  # test that it errors if you don't specify a year
+@test_throws ErrorException MimiRICE2010.compute_scc(year=2020)  # test that it errors if the year isn't in the time index
+@test_throws ErrorException MimiRICE2010.compute_scc(last_year=2300)  # test that it errors if the last_year isn't in the time index
+@test_throws ErrorException MimiRICE2010.compute_scc(year=2105, last_year=2100)  # test that it errors if the year is after last_year
+
+# Test the SCC 
+scc1 = MimiRICE2010.compute_scc(year=2015)
+@test scc1 isa Float64
+
+# Test that it's smaller with a shorter horizon
+scc2 = MimiRICE2010.compute_scc(year=2015, last_year=2295)
+@test scc2 < scc1
+
+# Test that it's larger with a smalle prtp
+scc3 = MimiRICE2010.compute_scc(year=2015, last_year=2295, prtp=0.02)
+@test scc3 > scc2
+
+# Test with a modified model 
+m = MimiRICE2010.get_model()
+update_param!(m, :t2xco2, 5)    
+scc4 = MimiRICE2010.compute_scc(m, year=2015)
+@test scc4 > scc1   # Test that a higher value of climate sensitivty makes the SCC bigger
+
+# Test compute_scc_mm
+result = MimiRICE2010.compute_scc_mm(year=2035)
+@test result.scc isa Float64
+@test result.mm isa Mimi.MarginalModel
+
+end
+
 end #mimi-rice-2010 testset
