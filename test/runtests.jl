@@ -143,9 +143,9 @@ scc1 = MimiRICE2010.compute_scc(year=2015)
 scc2 = MimiRICE2010.compute_scc(year=2015, last_year=2295)
 @test scc2 < scc1
 
-# Test that it's larger with a smalle prtp
+# Test that it's smaller with a smaller prtp
 scc3 = MimiRICE2010.compute_scc(year=2015, last_year=2295, prtp=0.02)
-@test scc3 > scc2
+@test scc3 < scc2
 
 # Test with a modified model 
 m = MimiRICE2010.get_model()
