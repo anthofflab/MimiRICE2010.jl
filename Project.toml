@@ -1,6 +1,6 @@
 name = "MimiRICE2010"
 uuid = "54b9761e-41d9-11e9-3151-3dc5fec6a45b"
-version = "2.0.3-DEV"
+version = "2.0.3"
 
 [deps]
 Mimi = "e4e893b0-ee5e-52ea-8111-44b3bdec128c"
