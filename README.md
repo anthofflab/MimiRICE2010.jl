@@ -53,7 +53,7 @@ understand the code structure. For starter code on running the model just once,
 see the code in the file `examples/main.jl`.
 
 The basic way to access a copy of the default MimiRICE2010 model is the following:
-```
+```julia
 using MimiRICE2010
 
 m = MimiRICE2010.get_model()
@@ -63,7 +63,7 @@ run(m)
 ## Calculating the Social Cost of Carbon
 
 Here is an example of computing the social cost of carbon with MimiRICE2010. Note that the units of the returned value are dollars $/ton CO2.
-```
+```julia
 using Mimi
 using MimiRICE2010
 
@@ -77,7 +77,7 @@ scc = MimiRICE2010.compute_scc(m, year=2015)    # compute the scc from the modif
 ```
 The first argument to the `compute_scc` function is a MimiRICE2010 model, and it is an optional argument. If no model is provided, the default MimiRICE2010 model will be used. 
 There are also other keyword arguments available to `compute_scc`. Note that the user must specify a `year` for the SCC calculation, but the rest of the keyword arguments have default values.
-```
+```julia
 compute_scc(m = get_model(),  # if no model provided, will use the default MimiRICE2010 model
     year = nothing,  # user must specify an emission year for the SCC calculation
     last_year = 2595,  # the last year to run and use for the SCC calculation. Default is the last year of the time dimension, 2595.
@@ -85,7 +85,7 @@ compute_scc(m = get_model(),  # if no model provided, will use the default MimiR
 )
 ```
 There is an additional function for computing the SCC that also returns the MarginalModel that was used to compute it. It returns these two values as a NamedTuple of the form (scc=scc, mm=mm). The same keyword arguments from the `compute_scc` function are available for the `compute_scc_mm` function. Example:
-```
+```julia
 using Mimi
 using MimiRICE2010
 
