@@ -1,8 +1,8 @@
 @defcomp emissions begin
     regions = Index()
 
-    E = Variable(index=[time]) # Total CO2 emissions (GtCO2 per year)
-    EIND = Variable(index=[time, regions]) # Industrial emissions (GtCO2 per year)
+    E = Variable(index=[time]) # Total CO2 emissions (GtC per year)
+    EIND = Variable(index=[time, regions]) # Industrial emissions (GtC per year)
     CCA = Variable(index=[time]) # Cumulative indiustrial emissions
     ABATECOST = Variable(index=[time, regions]) # Cost of emissions reductions  (trillions 2005 USD per year)
     MCABATE = Variable(index=[time, regions]) # Marginal cost of abatement (2005$ per ton CO2)

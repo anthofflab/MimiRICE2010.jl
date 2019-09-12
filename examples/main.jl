@@ -1,7 +1,7 @@
 using Mimi
 using MimiRICE2010
 
-m = getrice()
+m = get_model()
 run(m)
 
 explore(m)
