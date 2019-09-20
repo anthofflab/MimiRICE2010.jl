@@ -10,12 +10,24 @@
     CPC = Parameter(index=[time, regions])
     l = Parameter(index=[time, regions]) # Level of population and labor
     elasmu = Parameter(index=[regions]) # Elasticity of marginal utility of consumption
-    rr = Parameter(index=[time, regions]) # Average utility social discount rate
+    rr = Variable(index=[time, regions]) # Average utility social discount rate
     scale1 = Parameter(index=[regions]) # Multiplicative scaling coefficient
     scale2 = Parameter(index=[regions]) # Additive scaling coefficient
     alpha = Parameter(index=[time, regions])
 
+    prtp = Parameter()
+
     function run_timestep(p, v, d, t)
+
+        if is_first(t)
+            for r in d.regions
+                v.rr[t,r] = 1.
+            end
+        else
+            for r in d.regions
+                v.rr[t,r] = v.rr[t-1,r] / (1+p.prtp)^10
+            end
+        end
 
         #Define function for PERIODU #NEED TO ADD IF STATEMENT LIKE IN JUMP MODEL OR IS THAT ONLY ISSUES WHEN ELASMU = 1.0?
         for r in d.regions
@@ -28,11 +40,7 @@
 
         #Define function for CEMUTOTPER
         for r in d.regions
-            if t.t != 60
-                v.CEMUTOTPER[t,r] = v.PERIODU[t,r] * p.l[t,r] * p.rr[t,r]
-            else
-                v.CEMUTOTPER[t,r] = v.PERIODU[t,r] * p.l[t,r] * p.rr[t,r] / (1. - ((p.rr[t-1,r] / (1. + 0.015)^10) / p.rr[t-1,r]))
-            end
+            v.CEMUTOTPER[t,r] = v.PERIODU[t,r] * p.l[t,r] * v.rr[t,r]
         end
 
         #Define function for REGCUMCEMUTOTPER
