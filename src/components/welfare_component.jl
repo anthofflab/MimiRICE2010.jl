@@ -10,7 +10,7 @@
     CPC = Parameter(index=[time, regions])
     l = Parameter(index=[time, regions]) # Level of population and labor
     elasmu = Parameter(index=[regions]) # Elasticity of marginal utility of consumption
-    rr = Variable(index=[time, regions]) # Average utility social discount rate
+    RR = Variable(index=[time, regions]) # Average utility social discount rate
     scale1 = Parameter(index=[regions]) # Multiplicative scaling coefficient
     scale2 = Parameter(index=[regions]) # Additive scaling coefficient
     alpha = Parameter(index=[time, regions])
@@ -21,11 +21,11 @@
 
         if is_first(t)
             for r in d.regions
-                v.rr[t,r] = 1.
+                v.RR[t,r] = 1.
             end
         else
             for r in d.regions
-                v.rr[t,r] = v.rr[t-1,r] / (1+p.prtp)^10
+                v.RR[t,r] = v.RR[t-1,r] / (1+p.prtp)^10
             end
         end
 
@@ -40,7 +40,11 @@
 
         #Define function for CEMUTOTPER
         for r in d.regions
-            v.CEMUTOTPER[t,r] = v.PERIODU[t,r] * p.l[t,r] * v.rr[t,r]
+            if t.t != 60
+                v.CEMUTOTPER[t,r] = v.PERIODU[t,r] * p.l[t,r] * v.RR[t,r]
+            else
+                v.CEMUTOTPER[t,r] = v.PERIODU[t,r] * p.l[t,r] * v.RR[t,r] / (1. - ((v.RR[t-1,r] / (1. + 0.015)^10) / v.RR[t-1,r]))
+            end
         end
 
         #Define function for REGCUMCEMUTOTPER
