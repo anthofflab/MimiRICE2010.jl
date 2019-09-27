@@ -20,10 +20,9 @@ jobs:
         with:
           version: ${{ matrix.julia-version }}
       - uses: julia-actions/julia-buildpkg@master
+        env:
+          PYTHON: ""
       - uses: julia-actions/julia-runtest@master
       - uses: julia-actions/julia-uploadcodecov@master
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      - uses: julia-actions/julia-uploadcoveralls@master
-        env:
-          COVERALLS_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
