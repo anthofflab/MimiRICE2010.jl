@@ -26,7 +26,7 @@ function Truth(range::AbstractString)
 end
 
 # Test Precision
-Precision = 1.0e-10
+Precision = 1.0e-9
 
 @testset "MimiRICE2010" begin
 

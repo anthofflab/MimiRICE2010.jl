@@ -101,7 +101,6 @@ function getrice2010parameters(filename)
     p[:pbacktime] = getparam_timeseries(f, "B36:BI36", regions, T) # Backstop price
     p[:cost1] = getparam_timeseries(f, "B31:BI31", regions, T) # Adjusted cost for backstop
     regtree = getparam_timeseries(f, "B43:BI43", regions, T) # Regional Emissions from Land Use Change
-    p[:rr] = getparam_timeseries(f, "B17:BI17", regions, T) # Social Time Preference Factor
 
     # Global Emissions from Land Use Change (Sum of regional emissions for land use change in RICE model)
     etree = Array{Float64}(undef, T)

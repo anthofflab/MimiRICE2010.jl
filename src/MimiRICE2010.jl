@@ -147,10 +147,10 @@ function constructrice(p)
     # WELFARE COMPONENT
     set_param!(m, :welfare, :l, p[:l])
     set_param!(m, :welfare, :elasmu, p[:elasmu])
-    set_param!(m, :welfare, :rr, p[:rr])
     set_param!(m, :welfare, :scale1, p[:scale1])
     set_param!(m, :welfare, :scale2, p[:scale2])
     set_param!(m, :welfare, :alpha, p[:alpha])
+    set_param!(m, :welfare, :prtp, 0.015)
 
     connect_param!(m, :welfare, :CPC, :neteconomy, :CPC)
 
