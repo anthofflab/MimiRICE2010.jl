@@ -25,8 +25,8 @@ function getrice2010parameters(filename)
     p[:gama] = 0.300
     p[:dk]  = getparam_single(f, "B8:B8", regions) # Depreciation rate on capital (per year)
     p[:k0] = getparam_single(f, "B11:B11", regions) #Initial capital
-    p[:miu0] = getparam_single(f, "B103:B103", regions) # Initial emissions control rate for base case 2010
-    p[:miubase] = getparam_timeseries(f, "B103:BI103", regions, T) # Optimized emission control rate results from RICE2010 (base case)
+    # p[:miu0] = getparam_single(f, "B103:B103", regions) # Initial emissions control rate for base case 2010
+    p[:MIU] = getparam_timeseries(f, "B103:BI103", regions, T) # Optimized emission control rate results from RICE2010 (base case)
 
     # Carbon cycle
 
