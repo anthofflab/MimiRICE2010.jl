@@ -64,7 +64,7 @@ function get_marginal_model(m::Model=get_model(); year::Union{Int, Nothing} = no
     !(year in model_years) ? error("Cannot add marginal emissions in $year, year must be within the model's time index $(model_years[1]):10:$last_year.") : nothing
 
     mm = create_marginal_model(m, 1e10) # Pulse has a value of 1GtC per year for ten years
-    add_marginal_emissions!(mm.marginal, year)
+    add_marginal_emissions!(mm.modified, year)
 
     return mm
 end
@@ -94,7 +94,7 @@ function getmarginal_rice_models(;emissionyear=2005,datafile=joinpath(@__DIR__, 
 
     mm = MarginalModel(RICE)
     m1 = mm.base
-    m2 = mm.marginal
+    m2 = mm.modified
 
     add_comp!(m2, Mimi.adder, :marginalemission, before=:co2cycle)
 
