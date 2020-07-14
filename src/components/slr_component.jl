@@ -124,7 +124,7 @@
             if is_first(t)
                 v.AISREMAIN[t] = p.aiswais + p.aisother
             else
-                v.AISREMAIN[t] = v.AISREMAIN[1] - v.AISCUM[t]
+                v.AISREMAIN[t] = v.AISREMAIN[TimestepIndex(1)] - v.AISCUM[t]
             end
 
         #TOTAL SEA LEVEL RISE AND DAMAGES

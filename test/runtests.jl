@@ -93,7 +93,7 @@ end #mimi-rice-2010-model testset
 
 nullvalue = -999.999
 
-for c in map(name, Mimi.compdefs(m)), v in Mimi.variable_names(m, c)
+for c in map(nameof, Mimi.compdefs(m)), v in Mimi.variable_names(m, c)
 
     #load data for comparison
     filepath = joinpath(@__DIR__, "..", "data", "validation_data_v040", "$c-$v.csv")
@@ -104,7 +104,7 @@ for c in map(name, Mimi.compdefs(m)), v in Mimi.variable_names(m, c)
         validation_results = df[1,1]
 
     else
-        validation_results = convert(Array, df)
+        validation_results = convert(Matrix, df)
 
         #remove NaNs and Missings
         results[ismissing.(results)] .= nullvalue
@@ -124,7 +124,7 @@ end #for loop
 
 end #mimi-rice-2010-integration testset
 
-@testset "Standard API functions" begin 
+@testset "Standard API functions" begin
 
 m = MimiRICE2010.get_model()
 run(m)
@@ -135,7 +135,7 @@ run(m)
 @test_throws ErrorException MimiRICE2010.compute_scc(last_year=2300)  # test that it errors if the last_year isn't in the time index
 @test_throws ErrorException MimiRICE2010.compute_scc(year=2105, last_year=2100)  # test that it errors if the year is after last_year
 
-# Test the SCC 
+# Test the SCC
 scc1 = MimiRICE2010.compute_scc(year=2015)
 @test scc1 isa Float64
 
@@ -147,9 +147,9 @@ scc2 = MimiRICE2010.compute_scc(year=2015, last_year=2295)
 scc3 = MimiRICE2010.compute_scc(year=2015, last_year=2295, prtp=0.02)
 @test scc3 < scc2
 
-# Test with a modified model 
+# Test with a modified model
 m = MimiRICE2010.get_model()
-update_param!(m, :t2xco2, 5)    
+update_param!(m, :t2xco2, 5)
 scc4 = MimiRICE2010.compute_scc(m, year=2015)
 @test scc4 > scc1   # Test that a higher value of climate sensitivty makes the SCC bigger
 

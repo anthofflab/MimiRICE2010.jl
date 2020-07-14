@@ -2,22 +2,22 @@ function getrice2010parameters(filename)
     p = Dict{Symbol,Any}()
 
     T = 60
-    p[:timesteps] = 1:T # Time periods (5 years per period)
+    # p[:timesteps] = 1:T # Time periods (5 years per period); not currently used in constructrice
     regions = ["US", "EU", "Japan", "Russia", "Eurasia", "China", "India", "MidEast", "Africa", "LatAm", "OHI", "OthAsia"]
 
     # Open RICE_2010 Excel File to Read Parameters
     f = readxlsx(filename)
 
     # Time Step
-    p[:tstep] = 10 # Years per Period
-    p[:dt] =  10 # Time step parameter for model equations
+    # p[:tstep] = 10 # Years per Period; not currently used in constructrice
+    # p[:dt] =  10 # Time step parameter for model equations; not currently used in constructrice
 
     # If optimal control
     ifopt = true # Indicator where optimized is 1 and base is 0
 
     # Preferences
     p[:elasmu] =  getparam_single(f, "B18:B18", regions) # Elasticity of MU of consumption
-    p[:prstp] =  getparam_single(f, "B15:B15", regions) # Rate of Social Time Preference
+    # p[:prstp] =  getparam_single(f, "B15:B15", regions) # Rate of Social Time Preference; not currently used in constructrice
 
     # Population and technology
 
@@ -25,8 +25,8 @@ function getrice2010parameters(filename)
     p[:gama] = 0.300
     p[:dk]  = getparam_single(f, "B8:B8", regions) # Depreciation rate on capital (per year)
     p[:k0] = getparam_single(f, "B11:B11", regions) #Initial capital
-    p[:miu0] = getparam_single(f, "B103:B103", regions) # Initial emissions control rate for base case 2010
-    p[:miubase] = getparam_timeseries(f, "B103:BI103", regions, T) # Optimized emission control rate results from RICE2010 (base case)
+    # p[:miu0] = getparam_single(f, "B103:B103", regions) # Initial emissions control rate for base case 2010; not currently used in constructrice
+    # p[:miubase] = getparam_timeseries(f, "B103:BI103", regions, T) # Optimized emission control rate results from RICE2010 (base case); duplicate line to p[:MIU]
 
     # Carbon cycle
 
@@ -78,7 +78,7 @@ function getrice2010parameters(filename)
 
     # Availability of fossil fuels
     # Maximum cumulative extraction fossil fuels (GtC)
-    p[:fosslim] = 6000.
+    # p[:fosslim] = 6000; not currently used in constructrice.
 
     # Scaling parameters
     # Multiplicative scaling coefficient
@@ -93,8 +93,8 @@ function getrice2010parameters(filename)
     end
     p[:scale2] = scale2
 
-    p[:savebase] = getparam_timeseries(f, "B97:BI97", regions, T) # Optimized savings rate in base case for RICE2010
-    p[:optlrsav] = getparam_single(f, "BI97:BI97", regions) # Optimized savings rate in base case for RICE2010 for last period (fraction of gross output)
+    # p[:savebase] = getparam_timeseries(f, "B97:BI97", regions, T) # Optimized savings rate in base case for RICE2010; not currently used in constructrice
+    # p[:optlrsav] = getparam_single(f, "BI97:BI97", regions) # Optimized savings rate in base case for RICE2010 for last period (fraction of gross output); not currently used in constructrice
     p[:l] = getparam_timeseries(f, "B56:BI56", regions, T) # Level of population and labor
     p[:al] = getparam_timeseries(f, "B20:BI20", regions, T) # Level of total factor productivity
     p[:sigma] = getparam_timeseries(f, "B40:BI40", regions, T) # CO2-equivalent-emissions output ratio
@@ -122,7 +122,7 @@ function getrice2010parameters(filename)
     p[:partfract] = ones(60, length(regions))
 
     # Savings Rate (base case RICE2010)
-    p[:savings] = getparam_timeseries(f, "B97:BI97", regions, T)
+    p[:S] = getparam_timeseries(f, "B97:BI97", regions, T)
 
     # MIU (base case RICE2010)
     p[:MIU] = getparam_timeseries(f, "B103:BI103", regions, T)
@@ -142,7 +142,7 @@ function getrice2010parameters(filename)
     p[:gsictotal] = f["SLR"]["B12:B12"][1] # GSIC total ice (SLR equivalent in meters)
     p[:gsicmelt] = f["SLR"]["B13:B13"][1] # GSIC melt rate (meters/year/degree C)
     p[:gsicexp] = f["SLR"]["B11:B11"][1] # GSIC exponent (assumed)
-    p[:gsiceq] = f["SLR"]["B14:B14"][1] # GSIC equilibrium temperature (degrees C relative to global T of -1 degree C from 2000)
+    # p[:gsiceq] = f["SLR"]["B14:B14"][1] # GSIC equilibrium temperature (degrees C relative to global T of -1 degree C from 2000)
 
     # Greenland Ice Sheet (GIS)
     p[:gis0] = f["SLR"]["B18:B18"][1] # GIS initial ice volume (meters)

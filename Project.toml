@@ -7,8 +7,9 @@ Mimi = "e4e893b0-ee5e-52ea-8111-44b3bdec128c"
 XLSX = "fdbf4ff8-1666-58a4-91e7-1b58723a45e0"
 
 [compat]
-Mimi = "0.9"
-XLSX = "0.5.2"
+XLSX = "0.7.2"
+julia = "1.4"
+Mimi = "0.10"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
