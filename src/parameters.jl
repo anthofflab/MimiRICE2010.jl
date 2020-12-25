@@ -6,7 +6,7 @@ function getrice2010parameters(filename)
     regions = ["US", "EU", "Japan", "Russia", "Eurasia", "China", "India", "MidEast", "Africa", "LatAm", "OHI", "OthAsia"]
 
     # Open RICE_2010 Excel File to Read Parameters
-    f = openxl(filename)
+    f = readxlsx(filename)
 
     # Time Step
     # p[:tstep] = 10 # Years per Period; not currently used in constructrice
@@ -69,7 +69,7 @@ function getrice2010parameters(filename)
     p[:a3] = getparam_single(f, "B26:B26", regions) # Damage exponent
 
     # Welfare Weights
-    alpha0 = transpose(readxl(f, "Data!B359:BI370")) # Read in alpha
+    alpha0 = transpose(f["Data"]["B359:BI370"]) # Read in alpha
     p[:alpha] = convert(Array{Float64}, alpha0) # Convert to type used by Mimi
 
     # Abatement cost
@@ -88,7 +88,7 @@ function getrice2010parameters(filename)
     # Additive scaling coefficient (combines two additive scaling coefficients from RICE for calculating utility with welfare weights)
     scale2 = Array{Float64}(undef, length(regions))
     for (i,r) in enumerate(regions)
-        data = readxl(f, "$(r)!B53:C53")
+        data = f[r]["B53:C53"]
         scale2[i] = data[1] - data[2]
     end
     p[:scale2] = scale2
@@ -112,7 +112,7 @@ function getrice2010parameters(filename)
 
     # Exogenous forcing for other greenhouse gases
     forcoth =  Array{Float64}(undef, 60)
-    data = readxl(f, "Global!B21:BI21")
+    data = f["Global"]["B21:BI21"]
     for i=1:T
         forcoth[i] = data[i]
     end
@@ -134,32 +134,32 @@ function getrice2010parameters(filename)
     p[:slrdamquadratic] = getparam_single(f, "C48:C48", regions) # SLR damage parameter (quadratic)
 
     # Thermal Expansion
-    p[:therm0] = readxl(f, "SLR!B9:B9")[1] # Thermal Expansion initial conditions (SLR per decade)
-    p[:thermadj] = readxl(f, "SLR!B8:B8")[1] # Thermal Expansion adjustment rate/calibration (per decade)
-    p[:thermeq] = readxl(f,"SLR!B7:B7")[1] # Thermal Expansion equilibrium (m/degree C)
+    p[:therm0] = f["SLR"]["B9:B9"][1] # Thermal Expansion initial conditions (SLR per decade)
+    p[:thermadj] = f["SLR"]["B8:B8"][1] # Thermal Expansion adjustment rate/calibration (per decade)
+    p[:thermeq] = f["SLR"]["B7:B7"][1] # Thermal Expansion equilibrium (m/degree C)
 
     # Glaciers and Small Ice Caps (GSIC)
-    p[:gsictotal] = readxl(f, "SLR!B12:B12")[1] # GSIC total ice (SLR equivalent in meters)
-    p[:gsicmelt] = readxl(f, "SLR!B13:B13")[1] # GSIC melt rate (meters/year/degree C)
-    p[:gsicexp] = readxl(f, "SLR!B11:B11")[1] # GSIC exponent (assumed)
-    # p[:gsiceq] = readxl(f, "SLR!B14:B14")[1] # GSIC equilibrium temperature (degrees C relative to global T of -1 degree C from 2000); not currently used in constructrice
+    p[:gsictotal] = f["SLR"]["B12:B12"][1] # GSIC total ice (SLR equivalent in meters)
+    p[:gsicmelt] = f["SLR"]["B13:B13"][1] # GSIC melt rate (meters/year/degree C)
+    p[:gsicexp] = f["SLR"]["B11:B11"][1] # GSIC exponent (assumed)
+    # p[:gsiceq] = f["SLR"]["B14:B14"][1] # GSIC equilibrium temperature (degrees C relative to global T of -1 degree C from 2000)
 
     # Greenland Ice Sheet (GIS)
-    p[:gis0] = readxl(f, "SLR!B18:B18")[1] # GIS initial ice volume (meters)
-    p[:gismelt0] = readxl(f, "SLR!B17:B17")[1] # GIS initial melt rate (mm per year)
-    p[:gismeltabove] = readxl(f, "SLR!B20:B20")[1] # GIS melt rate above threshold (mm/year/degree C)
-    p[:gismineq] = readxl(f, "SLR!B19:B19")[1] # GIS minimum equilibrium temperature (degrees C)
-    p[:gisexp] = readxl(f, "SLR!B21:B21")[1] # GIS exponent on remaining
+    p[:gis0] = f["SLR"]["B18:B18"][1] # GIS initial ice volume (meters)
+    p[:gismelt0] = f["SLR"]["B17:B17"][1] # GIS initial melt rate (mm per year)
+    p[:gismeltabove] = f["SLR"]["B20:B20"][1] # GIS melt rate above threshold (mm/year/degree C)
+    p[:gismineq] = f["SLR"]["B19:B19"][1] # GIS minimum equilibrium temperature (degrees C)
+    p[:gisexp] = f["SLR"]["B21:B21"][1] # GIS exponent on remaining
 
     # Antarctic Ice Sheet (AIS)
-    p[:aismelt0] = readxl(f, "SLR!B24:B24")[1] # AIS initial melt rate (mm/year)
-    p[:aismeltlow] = readxl(f, "SLR!B26:B26")[1] # AIS melt rate lower (mm/year/degrees C) [T < 3 degrees C over Antarctic)
-    p[:aismeltup] = readxl(f, "SLR!B27:B27")[1] # AIS melt rate upper (mm/year/degrees C) [T = 8 degrees C over Antarctic]
-    p[:aisratio] = readxl(f, "SLR!B29:B29")[1] # AIS ratio t-ant/t-glob
-    p[:aisinflection] = readxl(f, "SLR!B28:B28")[1] # AIS inflection point (degrees C)
-    p[:aisintercept] = readxl(f, "SLR!B25:B25")[1] # AIS intercept (mm/year)
-    p[:aiswais] = readxl(f, "SLR!B31:B31")[1] # AIS total remaining ice volume (m) for WAIS
-    p[:aisother] = readxl(f, "SLR!B32:B32")[1] # AIS total remaining ice volume (m) for other AIS
+    p[:aismelt0] = f["SLR"]["B24:B24"][1] # AIS initial melt rate (mm/year)
+    p[:aismeltlow] = f["SLR"]["B26:B26"][1] # AIS melt rate lower (mm/year/degrees C) [T < 3 degrees C over Antarctic)
+    p[:aismeltup] = f["SLR"]["B27:B27"][1] # AIS melt rate upper (mm/year/degrees C) [T = 8 degrees C over Antarctic]
+    p[:aisratio] = f["SLR"]["B29:B29"][1] # AIS ratio t-ant/t-glob
+    p[:aisinflection] = f["SLR"]["B28:B28"][1] # AIS inflection point (degrees C)
+    p[:aisintercept] = f["SLR"]["B25:B25"][1] # AIS intercept (mm/year)
+    p[:aiswais] = f["SLR"]["B31:B31"][1] # AIS total remaining ice volume (m) for WAIS
+    p[:aisother] = f["SLR"]["B32:B32"][1] # AIS total remaining ice volume (m) for other AIS
 
     return p
 end
