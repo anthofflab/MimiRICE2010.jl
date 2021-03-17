@@ -125,7 +125,7 @@ function getmarginaldamages_rice(;emissionyear=2005,datafile=joinpath(@__DIR__, 
 
     # Calculate the marginal damage between run 1 and 2 for each
     # year/region
-    marginaldamage = (damage2.-damage1) .* 10^12 / 10^9 / 10
+    marginaldamage = (damage2.-damage1) .* 1e12 / 1e9 / 10.
 
     return marginaldamage
 end
