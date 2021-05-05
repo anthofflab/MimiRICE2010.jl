@@ -1,6 +1,6 @@
 name = "MimiRICE2010"
 uuid = "54b9761e-41d9-11e9-3151-3dc5fec6a45b"
-version = "3.0.3"
+version = "3.0.4-DEV"
 
 [deps]
 XLSX = "fdbf4ff8-1666-58a4-91e7-1b58723a45e0"
