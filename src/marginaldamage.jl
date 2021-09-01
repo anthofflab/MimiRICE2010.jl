@@ -1,42 +1,53 @@
 """
-compute_scc(m::Model=get_model(); year::Union{Int, Nothing} = nothing, last_year::Int = model_years[end], prtp::Float64 = 0.015, eta::Float64=1.5, equity_weighting::Bool = false)
+compute_scc(m::Model=get_model(); year::Union{Int, Nothing} = nothing, 
+    last_year::Int = model_years[end], prtp::Float64 = 0.015, eta::Float64=1.5, 
+    equity_weighting::Bool = false, normalization_region::Union{Int, Nothing} = nothing)
 
 Computes the social cost of CO2 for an emissions pulse in `year` for the provided MimiRICE2010 model. 
 If no model is provided, the default model from MimiRICE2010.get_model() is used.
 The discounting uses Ramsey discounting scheme with the specified pure rate of time 
 preference `prtp` and elasticity of marginal utility of consumption `eta`.
 """
-function compute_scc(m::Model=get_model(); year::Union{Int, Nothing} = nothing, last_year::Int = model_years[end], prtp::Float64 = 0.015, eta::Float64=1.5, equity_weighting::Bool = false)
+function compute_scc(m::Model=get_model(); year::Union{Int, Nothing} = nothing, 
+    last_year::Int = model_years[end], prtp::Float64 = 0.015, eta::Float64=1.5, 
+    equity_weighting::Bool = false, normalization_region::Union{Int, Nothing} = nothing)
+
     year === nothing ? error("Must specify an emission year. Try `compute_scc(m, year=2015)`.") : nothing
     !(last_year in model_years) ? error("Invlaid value of $last_year for last_year. last_year must be within the model's time index $model_years.") : nothing
     !(year in model_years[1]:10:last_year) ? error("Cannot compute the scc for year $year, year must be within the model's time index $(model_years[1]):10:$last_year.") : nothing
-
+    (!(equity_weighting) && !isnothing(normalization_region)) ? error("Cannot set a normalization region if equity weighting is false for SCC computation.") : nothing
+    
     mm = get_marginal_model(m; year = year)
 
-    return _compute_scc(mm, year=year, last_year=last_year, prtp=prtp, eta=eta, equity_weighting=equity_weighting)
+    return _compute_scc(mm, year=year, last_year=last_year, prtp=prtp, eta=eta, equity_weighting=equity_weighting, normalization_region=normalization_region)
 end
 
 """
-function compute_scc_mm(m::Model=get_model(); year::Union{Int, Nothing} = nothing, last_year::Int = model_years[end], prtp::Float64 = 0.015, eta::Float64=1.5, equity_weighting::Bool = false)
+compute_scc_mm(m::Model=get_model(); year::Union{Int, Nothing} = nothing, 
+    last_year::Int = model_years[end], prtp::Float64 = 0.015, eta::Float64=1.5, 
+    equity_weighting::Bool = false, normalization_region::Union{Int, Nothing} = nothing)
 
 Returns a NamedTuple (scc=scc, mm=mm) of the social cost of carbon and the MarginalModel used to compute it.
 Computes the social cost of CO2 for an emissions pulse in `year` for the provided MimiRICE2010 model. 
 If no model is provided, the default model from MimiRICE2010.get_model() is used.
 Constant discounting is used from the specified pure rate of time preference `prtp`.
 """
-function compute_scc_mm(m::Model=get_model(); year::Union{Int, Nothing} = nothing, last_year::Int = model_years[end], prtp::Float64 = 0.015, eta::Float64=1.5, equity_weighting::Bool = false)
+function compute_scc_mm(m::Model=get_model(); year::Union{Int, Nothing} = nothing, 
+    last_year::Int = model_years[end], prtp::Float64 = 0.015, eta::Float64=1.5, 
+    equity_weighting::Bool = false, normalization_region::Union{Int, Nothing} = nothing)
+
     year === nothing ? error("Must specify an emission year. Try `compute_scc_mm(m, year=2015)`.") : nothing
     !(last_year in model_years) ? error("Invlaid value of $last_year for last_year. last_year must be within the model's time index $model_years.") : nothing
     !(year in model_years[1]:10:last_year) ? error("Cannot compute the scc for year $year, year must be within the model's time index $(model_years[1]):10:$last_year.") : nothing
 
     mm = get_marginal_model(m; year = year)
-    scc = _compute_scc(mm; year=year, last_year=last_year, prtp=prtp, eta=eta, equity_weighting=equity_weighting)
+    scc = _compute_scc(mm; year=year, last_year=last_year, prtp=prtp, eta=eta, equity_weighting=equity_weighting, normalization_region=normalization_region)
     
     return (scc = scc, mm = mm)
 end
 
 # helper function for computing SCC from a MarginalModel, not to be exported or advertised to users
-function _compute_scc(mm::MarginalModel; year::Int, last_year::Int, prtp::Float64, eta::Float64, equity_weighting::Bool = false)
+function _compute_scc(mm::MarginalModel; year::Int, last_year::Int, prtp::Float64, eta::Float64, equity_weighting::Bool = false, normalization_region::Union{Int, Nothing} = nothing)
     ntimesteps = findfirst(isequal(last_year), model_years)     # Will run through the timestep of the specified last_year 
     run(mm, ntimesteps=ntimesteps)
 
@@ -56,7 +67,12 @@ function _compute_scc(mm::MarginalModel; year::Int, last_year::Int, prtp::Float6
     end
 
     year_index = findfirst(isequal(year), model_years)
-    cpc_0 = 1000 * sum(c[year_index,:]) / sum(pop[year_index, :])
+    
+    if isnothing(normalization_region)
+        cpc_0 = 1000 * sum(c[year_index,:]) / sum(pop[year_index, :])
+    else
+        cpc_0 = 1000 * c[year_index, normalization_region] / pop[year_index, normalization_region]
+    end
 
     df = zeros(year_index-1, num_regions)
     for (i,t) in enumerate(model_years)

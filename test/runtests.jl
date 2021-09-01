@@ -124,7 +124,7 @@ end #for loop
 
 end #mimi-rice-2010-integration testset
 
-@testset "Standard API functions" begin
+@testset "Standard API functions and SCC" begin
 
 m = MimiRICE2010.get_model()
 run(m)
@@ -135,7 +135,10 @@ run(m)
 @test_throws ErrorException MimiRICE2010.compute_scc(last_year=2300)  # test that it errors if the last_year isn't in the time index
 @test_throws ErrorException MimiRICE2010.compute_scc(year=2105, last_year=2100)  # test that it errors if the year is after last_year
 
+#
 # Test the SCC
+#
+
 scc1 = MimiRICE2010.compute_scc(year=2015)
 @test scc1 isa Float64
 
@@ -158,28 +161,40 @@ result = MimiRICE2010.compute_scc_mm(year=2035)
 @test result.scc isa Float64
 @test result.mm isa Mimi.MarginalModel
 
+#
 # Test equity weighted SCC
-scc7 = MimiRICE2010.compute_scc(year=2015; prtp=0.03, eta = 0.)
-scc8 = MimiRICE2010.compute_scc(year=2015; prtp=0.03, eta = 0., equity_weighting=true)
-@test scc7 ≈ scc8 atol = Precision
+#
+
+scc1 = MimiRICE2010.compute_scc(year=2015; equity_weighting=true)
+@test scc1 isa Float64
+
+scc2 = MimiRICE2010.compute_scc(year=2015; prtp=0.03, eta = 0.)
+scc3 = MimiRICE2010.compute_scc(year=2015; prtp=0.03, eta = 0., equity_weighting=true)
+@test scc2 ≈ scc3 atol = Precision
 
 # Test that it's smaller with a smaller prtp
-scc9 = MimiRICE2010.compute_scc(year=2015, last_year=2295; prtp=0.03, eta = 0., equity_weighting=true)
-@test scc9 < scc8
+scc4 = MimiRICE2010.compute_scc(year=2015, last_year=2295; prtp=0.03, eta = 0., equity_weighting=true)
+@test scc4 < scc2
 
 # Test with a modified model
 m = MimiRICE2010.get_model()
 update_param!(m, :t2xco2, 5)
-scc10 = MimiRICE2010.compute_scc(m, year=2015; prtp=0.03, eta = 0.)
-@test scc10 > scc8   # Test that a higher value of climate sensitivty makes the SCC bigger
+scc5 = MimiRICE2010.compute_scc(m, year=2015; prtp=0.03, eta = 0.)
+@test scc5 > scc4   # Test that a higher value of climate sensitivty makes the SCC bigger
 
 # test comparison
-scc11 = MimiRICE2010.compute_scc(year=2015; prtp=0.03, eta = 1.)
-scc12 = MimiRICE2010.compute_scc(year=2015; prtp=0.03, eta = 1., equity_weighting = true)
-@test scc12 > scc11
+scc6 = MimiRICE2010.compute_scc(year=2015; prtp=0.03, eta = 1.)
+scc7 = MimiRICE2010.compute_scc(year=2015; prtp=0.03, eta = 1., equity_weighting = true)
+@test scc7 > scc6
 
-scc13 = MimiRICE2010.compute_scc(year=2015; prtp=0.03, eta = 1.5, equity_weighting=true)
-@test scc12 > scc13
+scc8 = MimiRICE2010.compute_scc(year=2015; prtp=0.03, eta = 1.5, equity_weighting=true)
+@test scc7 > scc8 # higher eta will lead to lower SCC due to temporal inequality aversion dominating
+
+scc9 = MimiRICE2010.compute_scc(year=2015; equity_weighting=true)
+scc10 = MimiRICE2010.compute_scc(year=2015; equity_weighting=true, normalization_region = 1) # US normalization_region
+scc11 = MimiRICE2010.compute_scc(year=2015; equity_weighting=true, normalization_region = 7) # India normalization_region
+
+@test scc11 < scc9 < scc10
 
 end
 
