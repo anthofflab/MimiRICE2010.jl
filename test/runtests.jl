@@ -173,6 +173,11 @@ update_param!(m, :t2xco2, 5)
 scc10 = MimiRICE2010.compute_scc(m, year=2015; prtp=0.03, eta = 0.)
 @test scc10 > scc8   # Test that a higher value of climate sensitivty makes the SCC bigger
 
+# test comparison
+scc11 = MimiRICE2010.compute_scc(year=2015; prtp=0.03, eta = 1.)
+scc12 = MimiRICE2010.compute_scc(year=2015; prtp=0.03, eta = 1., equity_weighting = true)
+@test scc12 > scc11
+
 # Compare Values - Table 3. Social Cost of Carbon for Different Pure Rate of Time 
 # Preference Rates in Inequality and the Social Cost of Carbon
 MimiRICE2010.compute_scc(year=2015; prtp=0.001, eta = 1.5, equity_weighting=true)
