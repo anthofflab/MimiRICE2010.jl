@@ -158,6 +158,25 @@ result = MimiRICE2010.compute_scc_mm(year=2035)
 @test result.scc isa Float64
 @test result.mm isa Mimi.MarginalModel
 
+# Test equity weighted SCC
+scc7 = MimiRICE2010.compute_scc(year=2015; prtp=0.03, eta = 0.)
+scc8 = MimiRICE2010.compute_scc(year=2015; prtp=0.03, eta = 0., equity_weighting=true)
+@test scc7 ≈ scc8 atol = Precision
+
+# Test that it's smaller with a smaller prtp
+scc9 = MimiRICE2010.compute_scc(year=2015, last_year=2295; prtp=0.03, eta = 0., equity_weighting=true)
+@test scc9 < scc8
+
+# Test with a modified model
+m = MimiRICE2010.get_model()
+update_param!(m, :t2xco2, 5)
+scc10 = MimiRICE2010.compute_scc(m, year=2015; prtp=0.03, eta = 0.)
+@test scc10 > scc8   # Test that a higher value of climate sensitivty makes the SCC bigger
+
+# Compare Values - Table 3. Social Cost of Carbon for Different Pure Rate of Time 
+# Preference Rates in Inequality and the Social Cost of Carbon
+MimiRICE2010.compute_scc(year=2015; prtp=0.001, eta = 1.5, equity_weighting=true)
+
 end
 
 end #mimi-rice-2010 testset

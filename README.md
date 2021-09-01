@@ -86,7 +86,8 @@ There are also other keyword arguments available to `compute_scc`. Note that the
 compute_scc(m = get_model(),  # if no model provided, will use the default MimiRICE2010 model
     year = nothing,  # user must specify an emission year for the SCC calculation
     last_year = 2595,  # the last year to run and use for the SCC calculation. Default is the last year of the time dimension, 2595.
-    prtp = 0.03,  # pure rate of time preference parameter used for constant discounting
+    prtp = 0.03,  # pure rate of time preference parameter used for Ramsey discounting
+    eta = 0. # inequality aversion parameter used for Ramsey discounting
 )
 ```
 There is an additional function for computing the SCC that also returns the MarginalModel that was used to compute it. It returns these two values as a NamedTuple of the form (scc=scc, mm=mm). The same keyword arguments from the `compute_scc` function are available for the `compute_scc_mm` function. Example:
@@ -94,7 +95,7 @@ There is an additional function for computing the SCC that also returns the Marg
 using Mimi
 using MimiRICE2010
 
-result = MimiRICE2010.compute_scc_mm(year=2025, last_year=2295, prtp=0.025)
+result = MimiRICE2010.compute_scc_mm(year=2025, last_year=2295, prtp=0.025, eta = 0.)
 
 result.scc  # returns the computed SCC value
 

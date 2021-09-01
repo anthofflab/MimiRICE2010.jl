@@ -1,9 +1,10 @@
 """
-compute_scc(m::Model=get_model(); year::Int = nothing, last_year::Int = 2595), prtp::Float64 = 0.03, equity_weighting::Bool = false)
+compute_scc(m::Model=get_model(); year::Union{Int, Nothing} = nothing, last_year::Int = model_years[end], prtp::Float64 = 0.015, eta::Float64=1.5, equity_weighting::Bool = false)
 
 Computes the social cost of CO2 for an emissions pulse in `year` for the provided MimiRICE2010 model. 
 If no model is provided, the default model from MimiRICE2010.get_model() is used.
-Constant discounting is used from the specified pure rate of time preference `prtp`.
+The discounting uses Ramsey discounting scheme with the specified pure rate of time 
+preference `prtp` and inequality aversion `eta`.
 """
 function compute_scc(m::Model=get_model(); year::Union{Int, Nothing} = nothing, last_year::Int = model_years[end], prtp::Float64 = 0.015, eta::Float64=1.5, equity_weighting::Bool = false)
     year === nothing ? error("Must specify an emission year. Try `compute_scc(m, year=2015)`.") : nothing
@@ -16,12 +17,13 @@ function compute_scc(m::Model=get_model(); year::Union{Int, Nothing} = nothing, 
 end
 
 """
-compute_scc_mm(m::Model=get_model(); year::Int = nothing, last_year::Int = 2595, prtp::Float64 = 0.03)
+compute_scc_mm(m::Model=get_model(); year::Union{Int, Nothing} = nothing, last_year::Int = model_years[end], prtp::Float64 = 0.015, eta::Float64=1.5, equity_weighting::Bool = false)
 
 Returns a NamedTuple (scc=scc, mm=mm) of the social cost of carbon and the MarginalModel used to compute it.
 Computes the social cost of CO2 for an emissions pulse in `year` for the provided MimiRICE2010 model. 
 If no model is provided, the default model from MimiRICE2010.get_model() is used.
-Constant discounting is used from the specified pure rate of time preference `prtp`.
+The discounting uses Ramsey discounting scheme with the specified pure rate of time 
+preference `prtp` and inequality aversion `eta`.
 """
 function compute_scc_mm(m::Model=get_model(); year::Union{Int, Nothing} = nothing, last_year::Int = model_years[end], prtp::Float64 = 0.015, eta::Float64=1.5, equity_weighting::Bool = false)
     year === nothing ? error("Must specify an emission year. Try `compute_scc_mm(m, year=2015)`.") : nothing
