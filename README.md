@@ -87,7 +87,7 @@ compute_scc(m = get_model(),  # if no model provided, will use the default MimiR
     year = nothing,  # user must specify an emission year for the SCC calculation
     last_year = 2595,  # the last year to run and use for the SCC calculation. Default is the last year of the time dimension, 2595.
     prtp = 0.03,  # pure rate of time preference parameter used for Ramsey discounting
-    eta = 0. # inequality aversion parameter used for Ramsey discounting
+    eta = 0. # elasticity of marginal utility of consumption parameter discounting
 )
 ```
 There is an additional function for computing the SCC that also returns the MarginalModel that was used to compute it. It returns these two values as a NamedTuple of the form (scc=scc, mm=mm). The same keyword arguments from the `compute_scc` function are available for the `compute_scc_mm` function. Example:
