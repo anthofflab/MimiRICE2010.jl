@@ -1,7 +1,7 @@
 # MimiRICE2010.jl - a julia implementation of the RICE 2010 model
 
 [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
-![](https://github.com/anthofflab/MimiRICE2010.jl/workflows/Run%20tests/badge.svg)
+![](https://github.com/anthofflab/MimiRICE2010.jl/actions/workflows/jlpkgbutler-ci-master-workflow.yml/badge.svg)
 [![codecov](https://codecov.io/gh/anthofflab/MimiRICE2010.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/anthofflab/MimiRICE2010.jl)
 
 
