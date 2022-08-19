@@ -21,7 +21,7 @@
         elseif t.t == 2
             v.TATM[t] = p.tatm1
         else
-            v.TATM[t] = v.TATM[t-1] + p.c1 * ((p.FORC[t] - (p.fco22x/p.t2xco2) * v.TATM[t-1]) - (p.c3 * (v.TATM[t-1] - v.TOCEAN[t-1])))
+            v.TATM[t] = v.TATM[t-1] + p.c1 * ((p.FORC[t] - (p.fco22x / p.t2xco2) * v.TATM[t-1]) - (p.c3 * (v.TATM[t-1] - v.TOCEAN[t-1])))
         end
 
         #Define function for TOCEAN

@@ -21,32 +21,32 @@
 
         #Define function for EIND
         for r in d.regions
-            v.EIND[t,r] = p.sigma[t,r] * p.YGROSS[t,r] * (1-p.MIU[t,r])
+            v.EIND[t, r] = p.sigma[t, r] * p.YGROSS[t, r] * (1 - p.MIU[t, r])
         end
 
         #Define function for E
-        v.E[t] = sum(v.EIND[t,:]) + p.etree[t]
+        v.E[t] = sum(v.EIND[t, :]) + p.etree[t]
 
         #Define function for CCA
         if is_first(t)
-            v.CCA[t] = sum(v.EIND[t,:]) * 10.
+            v.CCA[t] = sum(v.EIND[t, :]) * 10.0
         else
-            v.CCA[t] =  v.CCA[t-1] + (sum(v.EIND[t,:]) * 10.)
+            v.CCA[t] = v.CCA[t-1] + (sum(v.EIND[t, :]) * 10.0)
         end
 
         #Define function for ABATECOST
         for r in d.regions
-            v.ABATECOST[t,r] = p.YGROSS[t,r] * p.cost1[t,r] * (p.MIU[t,r]^p.expcost2[r]) * (p.partfract[t,r]^(1 - p.expcost2[r]))
+            v.ABATECOST[t, r] = p.YGROSS[t, r] * p.cost1[t, r] * (p.MIU[t, r]^p.expcost2[r]) * (p.partfract[t, r]^(1 - p.expcost2[r]))
         end
 
         #Define function for MCABATE
         for r in d.regions
-            v.MCABATE[t,r] = p.pbacktime[t,r] * p.MIU[t,r]^(p.expcost2[r] - 1)
+            v.MCABATE[t, r] = p.pbacktime[t, r] * p.MIU[t, r]^(p.expcost2[r] - 1)
         end
 
         #Define function for CPRICE
         for r in d.regions
-            v.CPRICE[t,r] = p.pbacktime[t,r] * 1000 * p.MIU[t,r]^(p.expcost2[r] - 1)
+            v.CPRICE[t, r] = p.pbacktime[t, r] * 1000 * p.MIU[t, r]^(p.expcost2[r] - 1)
         end
     end
 

@@ -16,14 +16,14 @@ function getrice2010parameters(filename)
     ifopt = true # Indicator where optimized is 1 and base is 0
 
     # Preferences
-    p[:elasmu] =  getparam_single(f, "B18:B18", regions) # Elasticity of MU of consumption
+    p[:elasmu] = getparam_single(f, "B18:B18", regions) # Elasticity of MU of consumption
     # p[:prstp] =  getparam_single(f, "B15:B15", regions) # Rate of Social Time Preference; not currently used in constructrice
 
     # Population and technology
 
     # Capital elasticity in production function
     p[:gama] = 0.300
-    p[:dk]  = getparam_single(f, "B8:B8", regions) # Depreciation rate on capital (per year)
+    p[:dk] = getparam_single(f, "B8:B8", regions) # Depreciation rate on capital (per year)
     p[:k0] = getparam_single(f, "B11:B11", regions) #Initial capital
     # p[:miu0] = getparam_single(f, "B103:B103", regions) # Initial emissions control rate for base case 2010; not currently used in constructrice
     # p[:miubase] = getparam_timeseries(f, "B103:BI103", regions, T) # Optimized emission control rate results from RICE2010 (base case); duplicate line to p[:MIU]
@@ -31,29 +31,29 @@ function getrice2010parameters(filename)
     # Carbon cycle
 
     # Initial Conditions
-    p[:mat0] =  787.0 # Initial Concentration in atmosphere 2010 (GtC)
-    p[:mat1] =  829.0
-    p[:mu0] = 1600. # Initial Concentration in upper strata 2010 (GtC)
-    p[:ml0] =  10010. # Initial Concentration in lower strata 2010 (GtC)
+    p[:mat0] = 787.0 # Initial Concentration in atmosphere 2010 (GtC)
+    p[:mat1] = 829.0
+    p[:mu0] = 1600.0 # Initial Concentration in upper strata 2010 (GtC)
+    p[:ml0] = 10010.0 # Initial Concentration in lower strata 2010 (GtC)
 
     # Carbon cycle transition matrix
 
     # Flow paramaters
-    p[:b12] = 12.0/100 # Carbon cycle transition matrix atmosphere to shallow ocean
-    p[:b23] = 0.5/100 # Carbon cycle transition matrix shallow to deep ocean
+    p[:b12] = 12.0 / 100 # Carbon cycle transition matrix atmosphere to shallow ocean
+    p[:b23] = 0.5 / 100 # Carbon cycle transition matrix shallow to deep ocean
 
     # Parameters for long-run consistency of carbon cycle
-    p[:b11] = 88.0/100 # Carbon cycle transition matrix atmosphere to atmosphere
-    p[:b21] = 4.704/100 # Carbon cycle transition matrix biosphere/shallow oceans to atmosphere
-    p[:b22] = 94.796/100 # Carbon cycle transition matrix shallow ocean to shallow oceans
-    p[:b32] = 0.075/100 # Carbon cycle transition matrix deep ocean to shallow ocean
-    p[:b33] = 99.925/100 # Carbon cycle transition matrix deep ocean to deep oceans
+    p[:b11] = 88.0 / 100 # Carbon cycle transition matrix atmosphere to atmosphere
+    p[:b21] = 4.704 / 100 # Carbon cycle transition matrix biosphere/shallow oceans to atmosphere
+    p[:b22] = 94.796 / 100 # Carbon cycle transition matrix shallow ocean to shallow oceans
+    p[:b32] = 0.075 / 100 # Carbon cycle transition matrix deep ocean to shallow ocean
+    p[:b33] = 99.925 / 100 # Carbon cycle transition matrix deep ocean to deep oceans
 
     # Climate model parameters
     p[:t2xco2] = 3.2 # Equilibrium temp impact (oC per doubling CO2)
     fex0 = 0.83 # 2010 forcings of non-CO2 GHG (Wm-2)
     fex1 = 0.3 # 2100 forcings of non-CO2 GHG (Wm-2)
-    p[:tocean0] = .0068 #  Initial lower stratum temp change (C from 1900)
+    p[:tocean0] = 0.0068 #  Initial lower stratum temp change (C from 1900)
     p[:tatm0] = 0.83 # Initial atmospheric temp change 2005 (C from 1900)
     p[:tatm1] = 0.98 # Initial atmospheric temp change 2015 (C from 1900)
 
@@ -87,7 +87,7 @@ function getrice2010parameters(filename)
 
     # Additive scaling coefficient (combines two additive scaling coefficients from RICE for calculating utility with welfare weights)
     scale2 = Array{Float64}(undef, length(regions))
-    for (i,r) in enumerate(regions)
+    for (i, r) in enumerate(regions)
         data = f[r]["B53:C53"]
         scale2[i] = data[1] - data[2]
     end
@@ -106,14 +106,14 @@ function getrice2010parameters(filename)
     # Global Emissions from Land Use Change (Sum of regional emissions for land use change in RICE model)
     etree = Array{Float64}(undef, T)
     for i = 1:T
-        etree[i] = sum(regtree[i,:])
+        etree[i] = sum(regtree[i, :])
     end
     p[:etree] = etree
 
     # Exogenous forcing for other greenhouse gases
-    forcoth =  Array{Float64}(undef, 60)
+    forcoth = Array{Float64}(undef, 60)
     data = f["Global"]["B21:BI21"]
-    for i=1:T
+    for i = 1:T
         forcoth[i] = data[i]
     end
     p[:forcoth] = forcoth

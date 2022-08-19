@@ -49,7 +49,7 @@
         if is_first(t)
             v.MATSUM[t] = 0
         else
-            v.MATSUM[t] = v.MAT[t] + (v.MAT[t] * p.b11 + v.MU[t] * p.b21 +  (p.E[t] * 10))
+            v.MATSUM[t] = v.MAT[t] + (v.MAT[t] * p.b11 + v.MU[t] * p.b21 + (p.E[t] * 10))
         end
     end
 end
