@@ -19,7 +19,7 @@ integrated assessment models.
 
 ## Software requirements
 
-You need to install [julia 1.1](http://julialang.org/) or newer to run
+You need to install [julia 1.6](http://julialang.org/) or newer to run
 this model.
 
 ## Preparing the software environment
