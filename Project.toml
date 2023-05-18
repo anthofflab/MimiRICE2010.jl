@@ -8,7 +8,7 @@ XLSX = "fdbf4ff8-1666-58a4-91e7-1b58723a45e0"
 
 [compat]
 Mimi = "0.10, 1.0"
-XLSX = "0.7.2, 0.8"
+XLSX = "0.7.2, 0.8, 0.9"
 julia = "1.6"
 
 [extras]
