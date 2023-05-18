@@ -92,7 +92,7 @@ function constructrice(p)
     return m
 end #function
 
-function get_model(;datafile=joinpath(@__DIR__, "..", "data", "RICE_2010_base_000.xlsm"))
+function get_model(; datafile=joinpath(@__DIR__, "..", "data", "RICE_2010_base_000.xlsm"))
     params = getrice2010parameters(datafile)
 
     m = constructrice(params)
